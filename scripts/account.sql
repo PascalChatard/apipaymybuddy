@@ -1,0 +1,18 @@
+DROP TABLE IF EXISTS `account`;
+CREATE TABLE `account` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `opendate` DATE DEFAULT '1970-01-01',
+  `solde` DOUBLE DEFAULT NULL,	
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- ALTER TABLE `account` DISABLE KEYS 
+LOCK TABLES `account` WRITE;
+
+INSERT INTO `account` VALUES (1,'2021-12-02',150.45),
+                             (2,'2021-11-22',25.50),
+							 (3,'2021-10-15',500);
+
+-- ALTER TABLE `account` ENABLE KEYS
+UNLOCK TABLES;

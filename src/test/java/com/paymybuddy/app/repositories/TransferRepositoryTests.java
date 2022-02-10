@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.paymybuddy.app.model.Account;
-import com.paymybuddy.app.repository.AccountRepository;
+import com.paymybuddy.app.model.Transfer;
+import com.paymybuddy.app.repository.TransferRepository;
 
 @SpringBootTest
-class AccountRepositoryTests {
+class TransferRepositoryTests {
 
 	@Autowired
-	private AccountRepository accountRepository;
+	private TransferRepository transferRepository;
 
 	@Test
 	final void test() {
@@ -27,28 +27,29 @@ class AccountRepositoryTests {
 
 	@Test
 	void injectedComponentIsNotNull() {
-		assertThat(accountRepository).isNotNull();
+		assertThat(transferRepository).isNotNull();
 	}
 
 	@Test
 	void testFetchData() {
-		Iterable<Account> accounts = accountRepository.findAll();
+		Iterable<Transfer> transfers = transferRepository.findAll();
 		// check if there are records
-		assertNotNull(accounts);
+		assertNotNull(transfers);
 		int count = 0;
-		for (Account p : accounts) {
+		for (Transfer p : transfers) {
 			count++;
 		}
 		// there are three records in database
-		assertEquals(count, 3);
+		assertEquals(6, count);
 
 		// check first record
-		Optional<Account> optAccount = accountRepository.findById(1);
-		Account account = optAccount.get();
-		assertThat(account).isNotNull();
-		assertNotNull(account.getAccountId());
-		assertThat(account.getOpenDate()).isEqualTo("2021-12-02");
-		assertEquals(account.getSolde(), 150.45);
+		Optional<Transfer> optTransfer = transferRepository.findById(1);
+		Transfer transfer = optTransfer.get();
+		assertThat(transfer).isNotNull();
+		assertNotNull(transfer.getTransferId());
+		assertThat(transfer.getDate()).isEqualTo("2022-01-02");
+		assertEquals(transfer.getDescription(), "Remboursement ciné");
+		assertEquals(transfer.getAmount(), 15.05);
 	}
 
 }

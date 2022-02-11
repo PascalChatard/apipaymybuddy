@@ -3,6 +3,7 @@ package com.paymybuddy.app.repositories;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -53,11 +54,24 @@ class UserRepositoryTests {
 		assertEquals(user.getCity(), "marseille");
 		assertEquals(user.getPhone(), "0632467802");
 		assertEquals(user.getMail(), "durand.jean@aol.com");
-
-//		Optional<User> optUser2 = userRepository.findById(4);
-//		user = optUser2.get();
-//		assertNull(user);
-
 	}
+
+	@Test
+	void testRecordData() {
+		User user = new User();
+		user.setFirstName("leroi");
+		user.setLastName("merlin");
+		user.setAddress("7 rue bricolos");
+		user.setCity("nice");
+		user.setPhone("0493556231");
+		user.setMail("leroi.merlin@orange.fr");
+
+		// check there is no Id before recording data
+		assertNull(user.getUserId());
+		userRepository.save(user);
+		// check there is Id after recording data
+		assertNotNull(user.getUserId());
+	}
+
 
 }

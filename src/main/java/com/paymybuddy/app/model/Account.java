@@ -17,18 +17,18 @@ public class Account {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int accountId;
+	private Integer accountId;
 
 	@Column(name = "opendate")
 	private Date openDate;
 
 	private double solde;
 
-	public int getAccountId() {
+	public Integer getAccountId() {
 		return accountId;
 	}
 
-	public void setAccountId(int accountId) {
+	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
 

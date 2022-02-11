@@ -3,8 +3,10 @@ package com.paymybuddy.app.repositories;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.sql.Date;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -50,6 +52,22 @@ class TransferRepositoryTests {
 		assertThat(transfer.getDate()).isEqualTo("2022-01-02");
 		assertEquals(transfer.getDescription(), "Remboursement ciné");
 		assertEquals(transfer.getAmount(), 15.05);
+	}
+
+	@Test
+	void testRecordData() {
+
+		Date date = Date.valueOf("2022-01-02");
+		Transfer transfer = new Transfer();
+		transfer.setDate(date);
+		transfer.setDescription("Remboursement de qqch");
+		transfer.setAmount(11.55);
+
+		// check there is no Id before recording data
+		assertNull(transfer.getTransferId());
+		transferRepository.save(transfer);
+		// check there is Id after recording data
+		assertNotNull(transfer.getTransferId());
 	}
 
 }

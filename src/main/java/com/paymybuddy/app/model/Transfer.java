@@ -17,7 +17,7 @@ public class Transfer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int transferId;
+	private Integer transferId;
 
 	private Date date;
 
@@ -27,11 +27,11 @@ public class Transfer {
 
 	// getters & setters
 
-	public int getTransferId() {
+	public Integer getTransferId() {
 		return transferId;
 	}
 
-	public void setTransferId(int transferId) {
+	public void setTransferId(Integer transferId) {
 		this.transferId = transferId;
 	}
 

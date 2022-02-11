@@ -3,8 +3,10 @@ package com.paymybuddy.app.repositories;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.sql.Date;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -49,6 +51,21 @@ class AccountRepositoryTests {
 		assertNotNull(account.getAccountId());
 		assertThat(account.getOpenDate()).isEqualTo("2021-12-02");
 		assertEquals(account.getSolde(), 150.45);
+	}
+
+	@Test
+	void testRecordData() {
+
+		Date date = Date.valueOf("2022-01-23");
+		Account account = new Account();
+		account.setOpenDate(date);
+		account.setSolde(150.85);
+
+		// check there is no Id before recording data
+		assertNull(account.getAccountId());
+		accountRepository.save(account);
+		// check there is Id after recording data
+		assertNotNull(account.getAccountId());
 	}
 
 }

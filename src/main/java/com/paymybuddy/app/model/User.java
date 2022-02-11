@@ -14,7 +14,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int userId;
+	private Integer userId;
 
 	@Column(name = "firstname")
 	private String firstName;
@@ -31,11 +31,11 @@ public class User {
 	private String mail;
 
 	// getters & setters
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 

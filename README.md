@@ -1,6 +1,7 @@
 # PayMyBuddy
 
-##MCD
-![Optional Text](../master/diagrammes/DiagrammeDeClasses.png)
-
+## MCD
 ![MCD](/diagrammes/DiagrammeDeClasses.png)
+
+## MLD
+![MCD](/diagrammes/DiagrammeMLD.png)

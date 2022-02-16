@@ -12,12 +12,13 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
-import com.paymybuddy.app.model.Transfer;
-import com.paymybuddy.app.repository.TransferRepository;
+import com.paymybuddy.app.models.Transfer;
 
 @SpringBootTest
-class TransferRepositoryTests {
+@Sql("transfer.sql")
+class TransferRepositoryIT {
 
 	@Autowired
 	private TransferRepository transferRepository;

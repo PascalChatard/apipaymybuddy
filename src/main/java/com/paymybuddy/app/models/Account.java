@@ -1,4 +1,4 @@
-package com.paymybuddy.app.model;
+package com.paymybuddy.app.models;
 
 
 import java.sql.Date;

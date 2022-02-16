@@ -12,12 +12,13 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
-import com.paymybuddy.app.model.Account;
-import com.paymybuddy.app.repository.AccountRepository;
+import com.paymybuddy.app.models.Account;
 
 @SpringBootTest
-class AccountRepositoryTests {
+@Sql("account.sql")
+class AccountRepositoryIT {
 
 	@Autowired
 	private AccountRepository accountRepository;

@@ -1,17 +1,18 @@
 package com.paymybuddy.app.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.paymybuddy.app.models.Transfer;
@@ -23,10 +24,6 @@ class TransferRepositoryIT {
 	@Autowired
 	private TransferRepository transferRepository;
 
-	@Test
-	final void test() {
-		assertTrue(true);
-	}
 
 	@Test
 	void injectedComponentIsNotNull() {
@@ -34,22 +31,23 @@ class TransferRepositoryIT {
 	}
 
 	@Test
-	void testFetchData() {
+	void testFetchAllData() {
 		Iterable<Transfer> transfers = transferRepository.findAll();
 		// check if there are records
-		assertNotNull(transfers);
-		int count = 0;
-		for (Transfer p : transfers) {
-			count++;
-		}
-		// there are three records in database
-		assertEquals(6, count);
+		assertThat(transfers).doesNotContainNull();
+		assertThat(transfers).size().isGreaterThan(0);
+		assertThat(transfers).size().isEqualTo(6);
+	}
 
-		// check first record
+	@Test
+	void testFetchRecord() {
+		// check that exist record with ID's 1
 		Optional<Transfer> optTransfer = transferRepository.findById(1);
+		assertThat(optTransfer).isNotEmpty();
+
+		// check attibuts values
 		Transfer transfer = optTransfer.get();
-		assertThat(transfer).isNotNull();
-		assertNotNull(transfer.getTransferId());
+		assertThat(transfer.getTransferId()).isEqualTo(1);
 		assertThat(transfer.getDate()).isEqualTo("2022-01-02");
 		assertEquals(transfer.getDescription(), "Remboursement ciné");
 		assertEquals(transfer.getAmount(), 15.05);
@@ -65,10 +63,57 @@ class TransferRepositoryIT {
 		transfer.setAmount(11.55);
 
 		// check there is no Id before recording data
-		assertNull(transfer.getTransferId());
-		transferRepository.save(transfer);
+		assertThat(transfer.getTransferId()).isNull();
+		Transfer savedTransfer = transferRepository.save(transfer);
 		// check there is Id after recording data
-		assertNotNull(transfer.getTransferId());
+		assertThat(savedTransfer).isEqualTo(transfer);
 	}
 
+	@Test
+	void testDeleteRecordById() {
+
+		assertDoesNotThrow(() -> transferRepository.deleteById(1));
+		assertThat(transferRepository.existsById(1)).isFalse();
+	}
+
+	@Test
+	void testDeleteRecordById_ThrowEmptyResultDataAccessException() {
+
+		// check that delete a record with a ID out of bound throws an
+		// exception
+		assertThatExceptionOfType(EmptyResultDataAccessException.class)
+				.isThrownBy(() -> transferRepository.deleteById(1000));
+	}
+
+	@Test
+	void testDeleteRecord() {
+
+		// check first record
+		Optional<Transfer> optTransfer = transferRepository.findById(1);
+		Transfer transfer = optTransfer.get();
+		assertThat(transfer).isNotNull();
+		transferRepository.delete(transfer);
+		// check that get optional with finding record with ID 1 throws an exception
+		assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(() -> transferRepository.findById(1).get());
+		// check that finding record with ID 1 return empty optional
+		assertThat(transferRepository.findById(1)).isEmpty();
+	}
+
+	@Test
+	void testCountData() {
+		// there are three records in database
+		assertThat(transferRepository.count()).isEqualTo(6);
+	}
+
+	@Test
+	void testExistById_True() {
+		// there are three records in database and ID's are (1,2,3)
+		assertThat(transferRepository.existsById(1)).isTrue();
+	}
+
+	@Test
+	void testExistById_False() {
+		// there are three records in database and ID's are (1,2,3)
+		assertThat(transferRepository.existsById(100)).isFalse();
+	}
 }

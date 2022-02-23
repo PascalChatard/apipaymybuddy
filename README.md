@@ -11,7 +11,7 @@ This app uses Java to run and stores the data in MariaDB database.
 > 6. Eclipse 2018-12 
 
 ## MCD
-![MCD](/diagrammes/DiagrammeDeClasses.png)
+![MCD](/diagrammes/DiagrammeDeClasse.png)
 
 ## MLD
 ![MLD](/diagrammes/DiagrammeMLD.png)

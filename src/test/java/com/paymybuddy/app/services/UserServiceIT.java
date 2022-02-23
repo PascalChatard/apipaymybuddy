@@ -2,9 +2,6 @@ package com.paymybuddy.app.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 
@@ -22,10 +19,6 @@ class UserServiceIT {
 	@Autowired
 	UserService userService;
 
-	@Test
-	final void test() {
-		assertTrue(true);
-	}
 
 	@Test
 	void injectedComponentIsNotNull() {
@@ -34,12 +27,16 @@ class UserServiceIT {
 
 	@Test
 	void testFetchRecord() {
-		// get first record
-		Optional<User> optUser1 = userService.findById(1);
-		User user = optUser1.get();
-		// check first record
+
+		// WHEN
+		Optional<User> optUser = userService.findById(1);
+
+		// THEN
+		assertThat(optUser).isNotEmpty();
+		User user = optUser.get();
 		assertThat(user).isNotNull();
-		assertNotNull(user.getUserId());
+		assertThat(user.getUserId()).isNotNull();
+		assertThat(user.getUserId()).isEqualTo(1);
 		assertEquals(user.getFirstName(), "durand");
 		assertEquals(user.getLastName(), "jean");
 		assertEquals(user.getAddress(), "56 impasse des souris");
@@ -48,21 +45,25 @@ class UserServiceIT {
 		assertEquals(user.getMail(), "durand.jean@aol.com");
 	}
 
-	@Test
-	void testFetchData() {
-		Iterable<User> users = userService.findAll();
-		// check if there are records
-		assertNotNull(users);
-		int count = 0;
-		for (User p : users) {
-			count++;
-		}
-		// there are three records in database
-		assertEquals(count, 3);
-	}
 
 	@Test
-	void testRecordData() {
+	void testFetchAllRecord() {
+
+		// WHEN
+		Iterable<User> users = userService.findAll();
+
+		// THEN
+		// check if there are records
+		assertThat(users).doesNotContainNull();
+		assertThat(users).size().isGreaterThan(0);
+		assertThat(users).size().isEqualTo(3);
+	}
+
+
+	@Test
+	void testSaveEntity() {
+
+		// GIVEN
 		User user = new User();
 		user.setFirstName("leroi");
 		user.setLastName("merlin");
@@ -71,46 +72,75 @@ class UserServiceIT {
 		user.setPhone("0493556231");
 		user.setMail("leroi.merlin@orange.fr");
 
-		// check there is no Id before recording data
-		assertNull(user.getUserId());
-		userService.save(user);
-		// check there is Id after recording data
-		assertNotNull(user.getUserId());
+		// WHEN
+		User savedUser = userService.save(user);
+
+		// THEN
+		assertThat(savedUser).isNotNull();
+		assertThat(savedUser).isEqualTo(user);
 	}
+
 
 	@Test
 	void testDeleteRecordById() {
-		// get first record
-		Optional<User> optUser1 = userService.findById(1);
-		User user = optUser1.get();
 
-		// check there is Id after recording data
-		assertNotNull(user.getUserId());
+		// GIVEN
+		Optional<User> optUser = userService.findById(1);
+		assertThat(optUser).isNotEmpty();
+		User user = optUser.get();
 
+		// WHEN
 		userService.deleteById(user.getUserId());
 
-		// check there is no Id before recording data
-		// assertNull(user.getUserId());
+		// THEN
+		assertThat(userService.existsById(1)).isFalse();
 	}
+
 
 	@Test
 	void testDeleteRecordByEntity() {
-		// check first record
-		User user = new User();
-		user.setFirstName("leroi");
-		user.setLastName("merlin");
-		user.setAddress("7 rue bricolos");
-		user.setCity("nice");
-		user.setPhone("0493556231");
-		user.setMail("leroi.merlin@orange.fr");
 
-		// check there is Id after recording data
-		// assertNotNull(user.getUserId());
+		// GIVEN
+		Optional<User> optUser = userService.findById(1);
+		assertThat(optUser).isNotEmpty();
+		User user = optUser.get();
 
+		// WHEN
 		userService.delete(user);
 
-		// check there is no Id before recording data
-		assertNull(user.getUserId());
+		// THEN
+		assertThat(userService.existsById(user.getUserId())).isFalse();
+	}
+
+
+	@Test
+	void testCountRecords() {
+
+		// WHEN
+		long nbRecords = userService.count();
+
+		// THEN
+		assertThat(nbRecords).isEqualTo(3);
+	}
+
+	@Test
+	void testExistById_True() {
+
+		// WHEN
+		boolean existUser = userService.existsById(2);
+
+		// THEN
+		assertThat(existUser).isTrue();
+	}
+
+	@Test
+	void testExistById_False() {
+
+		// WHEN
+		boolean existUser = userService.existsById(15);
+
+		// THEN
+		assertThat(existUser).isFalse();
 	}
 
 }

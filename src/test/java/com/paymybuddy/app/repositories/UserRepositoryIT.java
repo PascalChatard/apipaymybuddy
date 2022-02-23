@@ -26,12 +26,18 @@ class UserRepositoryIT {
 
 	@Test
 	void injectedComponentIsNotNull() {
+
+		// THEN
 		assertThat(userRepository).isNotNull();
 	}
 
 	@Test
 	void testFetchAllData() {
+
+		// WHEN
 		Iterable<User> users = userRepository.findAll();
+
+		// THEN
 		// check if there are records
 		assertThat(users).doesNotContainNull();
 		assertThat(users).size().isGreaterThan(0);
@@ -40,10 +46,13 @@ class UserRepositoryIT {
 
 	@Test
 	void testFetchRecord() {
+
+		// WHEN
 		// check that exist record with ID's 1
 		Optional<User> optUser = userRepository.findById(1);
 		assertThat(optUser).isNotEmpty();
 
+		// THEN
 		// check attibuts values
 		User user = optUser.get();
 		assertThat(user.getUserId()).isEqualTo(1);
@@ -57,6 +66,8 @@ class UserRepositoryIT {
 
 	@Test
 	void testRecordData() {
+
+		// GIVEN
 		User user = new User();
 		user.setFirstName("leroi");
 		user.setLastName("merlin");
@@ -65,15 +76,17 @@ class UserRepositoryIT {
 		user.setPhone("0493556231");
 		user.setMail("leroi.merlin@orange.fr");
 
-		// check there is no Id before recording data
-		assertThat(user.getUserId()).isNull();
+		// WHEN
 		User savedUser = userRepository.save(user);
-		// check there is Id after recording data
+
+		// THEN
 		assertThat(savedUser).isEqualTo(user);
 	}
 
 	@Test
 	void testRecordData_ThrowException_WhenMAilAttributAlreadyExist() {
+
+		// GIVEN
 		User user = new User();
 		user.setFirstName("alain");
 		user.setLastName("Lejeune");
@@ -82,6 +95,7 @@ class UserRepositoryIT {
 		user.setPhone("0493556231");
 		user.setMail("alejeune@outlook.com");
 
+		// THEN
 		// check there is no Id before recording data
 		assertThat(user.getUserId()).isNull();
 		// check that a save user with a already exist mail's attribute throws an
@@ -92,17 +106,15 @@ class UserRepositoryIT {
 	@Test
 	void testDeleteRecordById() {
 
+		// THEN
 		assertDoesNotThrow(() -> userRepository.deleteById(1));
 		assertThat(userRepository.existsById(1)).isFalse();
-
-		// assertThatCode(() ->
-		// userRepository.deleteById(1)).doesNotThrowAnyException();
-		// assertThatNoException().isThrownBy(userRepository.deleteById(1));
 	}
 
 	@Test
-	void testDeleteRecordById_ThrowEmptyResultDataAccessException() {
+	void testDeleteRecordById_Throw_EmptyResultDataAccessException() {
 
+		// THEN
 		// check that delete a record with a ID out of bound throws an
 		// exception
 		assertThatExceptionOfType(EmptyResultDataAccessException.class)
@@ -112,11 +124,16 @@ class UserRepositoryIT {
 	@Test
 	void testDeleteRecord() {
 
+		// GIVEN
 		// check first record
 		Optional<User> optUser = userRepository.findById(1);
 		User user = optUser.get();
 		assertThat(user).isNotNull();
+
+		// WHEN
 		userRepository.delete(user);
+
+		// THEN
 		// check that get optional with finding record with ID 1 throws an exception
 		assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(() -> userRepository.findById(1).get());
 		// check that finding record with ID 1 return empty optional
@@ -125,18 +142,24 @@ class UserRepositoryIT {
 
 	@Test
 	void testCountData() {
+
+		// THEN
 		// there are three records in database
 		assertThat(userRepository.count()).isEqualTo(3);
 	}
 
 	@Test
 	void testExistById_True() {
+
+		// THEN
 		// there are three records in database and ID's are (1,2,3)
 		assertThat(userRepository.existsById(1)).isTrue();
 	}
 
 	@Test
 	void testExistById_False() {
+
+		// THEN
 		// there are three records in database and ID's are (1,2,3)
 		assertThat(userRepository.existsById(100)).isFalse();
 	}

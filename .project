@@ -11,12 +11,23 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
+			<name>org.springframework.ide.eclipse.core.springbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.springframework.ide.eclipse.boot.validation.springbootbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.springframework.ide.eclipse.core.springnature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
@@ -35,6 +46,16 @@
 			<name>src/test/java/com/paymybuddy/app/repositories/user.sql</name>
 			<type>1</type>
 			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/user.sql</location>
+		</link>
+		<link>
+			<name>src/test/java/com/paymybuddy/app/services/account.sql</name>
+			<type>1</type>
+			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/account.sql</location>
+		</link>
+		<link>
+			<name>src/test/java/com/paymybuddy/app/services/transfer.sql</name>
+			<type>1</type>
+			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/transfer.sql</location>
 		</link>
 		<link>
 			<name>src/test/java/com/paymybuddy/app/services/user.sql</name>

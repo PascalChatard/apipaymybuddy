@@ -38,4 +38,8 @@ public class UserService {
 		return userRepository.existsById(userId);
 	}
 
+	public long count() {
+		return userRepository.count();
+	}
+
 }

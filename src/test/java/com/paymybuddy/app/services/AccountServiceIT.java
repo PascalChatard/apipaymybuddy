@@ -6,7 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.Date;
 import java.util.Optional;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
@@ -14,18 +17,21 @@ import org.springframework.test.context.jdbc.Sql;
 import com.paymybuddy.app.models.Account;
 
 @SpringBootTest
-@Sql("account.sql")
+@Sql("data.sql")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AccountServiceIT {
 
 	@Autowired
 	AccountService accountService;
 
 	@Test
+	@Order(1)
 	void injectedComponentIsNotNull() {
 		assertThat(accountService).isNotNull();
 	}
 
 	@Test
+	@Order(2)
 	void testFetchRecord() {
 
 		// WHEN
@@ -42,6 +48,7 @@ class AccountServiceIT {
 	}
 
 	@Test
+	@Order(3)
 	void testFetchAllRecord() {
 
 		// WHEN
@@ -55,6 +62,7 @@ class AccountServiceIT {
 	}
 
 	@Test
+	@Order(4)
 	void testSaveEntity() {
 
 		// GIVEN
@@ -73,6 +81,7 @@ class AccountServiceIT {
 	}
 
 	@Test
+	@Order(5)
 	void testDeleteRecordById() {
 
 		// GIVEN
@@ -88,6 +97,7 @@ class AccountServiceIT {
 	}
 
 	@Test
+	@Order(6)
 	void testDeleteRecordByEntity() {
 
 		// GIVEN
@@ -103,6 +113,7 @@ class AccountServiceIT {
 	}
 
 	@Test
+	@Order(7)
 	void testCountRecords() {
 
 		// WHEN
@@ -113,6 +124,7 @@ class AccountServiceIT {
 	}
 
 	@Test
+	@Order(8)
 	void testExistById_True() {
 
 		// WHEN
@@ -123,6 +135,7 @@ class AccountServiceIT {
 	}
 
 	@Test
+	@Order(9)
 	void testExistById_False() {
 
 		// WHEN

@@ -33,34 +33,19 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>src/test/java/com/paymybuddy/app/repositories/account.sql</name>
+			<name>src/test/java/com/paymybuddy/app/data.sql</name>
 			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/account.sql</location>
+			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/data.sql</location>
 		</link>
 		<link>
-			<name>src/test/java/com/paymybuddy/app/repositories/transfer.sql</name>
+			<name>src/test/java/com/paymybuddy/app/repositories/data.sql</name>
 			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/transfer.sql</location>
+			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/data.sql</location>
 		</link>
 		<link>
-			<name>src/test/java/com/paymybuddy/app/repositories/user.sql</name>
+			<name>src/test/java/com/paymybuddy/app/services/data.sql</name>
 			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/user.sql</location>
-		</link>
-		<link>
-			<name>src/test/java/com/paymybuddy/app/services/account.sql</name>
-			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/account.sql</location>
-		</link>
-		<link>
-			<name>src/test/java/com/paymybuddy/app/services/transfer.sql</name>
-			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/transfer.sql</location>
-		</link>
-		<link>
-			<name>src/test/java/com/paymybuddy/app/services/user.sql</name>
-			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/user.sql</location>
+			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/data.sql</location>
 		</link>
 	</linkedResources>
 </projectDescription>

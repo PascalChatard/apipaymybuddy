@@ -6,7 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.Date;
 import java.util.Optional;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
@@ -14,7 +17,8 @@ import org.springframework.test.context.jdbc.Sql;
 import com.paymybuddy.app.models.Transfer;
 
 @SpringBootTest
-@Sql("transfer.sql")
+@Sql("data.sql")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TransferServiceIT {
 
 	@Autowired
@@ -22,12 +26,14 @@ class TransferServiceIT {
 
 
 	@Test
+	@Order(1)
 	void injectedComponentIsNotNull() {
 		assertThat(transferService).isNotNull();
 	}
 
 
 	@Test
+	@Order(2)
 	void testFetchRecord() {
 
 		// WHEN
@@ -46,6 +52,7 @@ class TransferServiceIT {
 
 
 	@Test
+	@Order(3)
 	void testFetchAllRecord() {
 
 		// WHEN
@@ -60,6 +67,7 @@ class TransferServiceIT {
 
 
 	@Test
+	@Order(4)
 	void testSaveEntity() {
 
 		// GIVEN
@@ -80,6 +88,7 @@ class TransferServiceIT {
 
 
 	@Test
+	@Order(5)
 	void testDeleteRecordById() {
 
 		// GIVEN
@@ -96,6 +105,7 @@ class TransferServiceIT {
 
 
 	@Test
+	@Order(6)
 	void testDeleteRecordByEntity() {
 
 		// GIVEN
@@ -111,6 +121,7 @@ class TransferServiceIT {
 	}
 
 	@Test
+	@Order(7)
 	void testCountRecords() {
 
 		// WHEN
@@ -121,6 +132,7 @@ class TransferServiceIT {
 	}
 
 	@Test
+	@Order(8)
 	void testExistById_True() {
 
 		// WHEN
@@ -131,6 +143,7 @@ class TransferServiceIT {
 	}
 
 	@Test
+	@Order(9)
 	void testExistById_False() {
 
 		// WHEN

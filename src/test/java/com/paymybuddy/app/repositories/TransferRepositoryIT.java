@@ -9,7 +9,10 @@ import java.sql.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,7 +21,8 @@ import org.springframework.test.context.jdbc.Sql;
 import com.paymybuddy.app.models.Transfer;
 
 @SpringBootTest
-@Sql("transfer.sql")
+@Sql("data.sql")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TransferRepositoryIT {
 
 	@Autowired
@@ -26,6 +30,7 @@ class TransferRepositoryIT {
 
 
 	@Test
+	@Order(1)
 	void injectedComponentIsNotNull() {
 
 		// THEN
@@ -33,6 +38,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Order(2)
 	void testFetchAllData() {
 
 		// WHEN
@@ -46,6 +52,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Order(3)
 	void testFetchRecord() {
 
 		// WHEN
@@ -63,6 +70,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Order(4)
 	void testRecordData() {
 
 		// GIVEN
@@ -80,6 +88,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Order(5)
 	void testDeleteRecordById() {
 
 		// THEN
@@ -88,6 +97,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Order(6)
 	void testDeleteRecordById_ThrowEmptyResultDataAccessException() {
 
 		// THEN
@@ -98,6 +108,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Order(7)
 	void testDeleteRecord() {
 
 		// GIVEN
@@ -117,6 +128,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Order(8)
 	void testCountData() {
 
 		// THEN
@@ -125,6 +137,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Order(9)
 	void testExistById_True() {
 
 		// THEN
@@ -133,6 +146,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Order(10)
 	void testExistById_False() {
 
 		// THEN

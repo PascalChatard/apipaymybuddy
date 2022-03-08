@@ -14,7 +14,7 @@ public class AccountService {
 	@Autowired
 	AccountRepository accountRepository;
 
-	Optional<Account> findById(Integer accountId) {
+	public Optional<Account> findById(Integer accountId) {
 		return accountRepository.findById(accountId);
 	}
 

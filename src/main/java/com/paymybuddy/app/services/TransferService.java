@@ -14,7 +14,7 @@ public class TransferService {
 	@Autowired
 	TransferRepository transferRepository;
 
-	Optional<Transfer> findById(Integer userId) {
+	public Optional<Transfer> findById(Integer userId) {
 		return transferRepository.findById(userId);
 	}
 

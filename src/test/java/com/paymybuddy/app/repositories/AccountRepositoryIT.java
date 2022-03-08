@@ -8,7 +8,10 @@ import java.sql.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,7 +20,8 @@ import org.springframework.test.context.jdbc.Sql;
 import com.paymybuddy.app.models.Account;
 
 @SpringBootTest
-@Sql("account.sql")
+@Sql("data.sql")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AccountRepositoryIT {
 
 	@Autowired
@@ -25,6 +29,7 @@ class AccountRepositoryIT {
 
 
 	@Test
+	@Order(1)
 	void injectedComponentIsNotNull() {
 
 		// THEN
@@ -32,6 +37,7 @@ class AccountRepositoryIT {
 	}
 
 	@Test
+	@Order(2)
 	void testFetchAllData() {
 
 		// WHEN
@@ -45,6 +51,7 @@ class AccountRepositoryIT {
 	}
 
 	@Test
+	@Order(3)
 	void testFetchRecord() {
 
 		// WHEN
@@ -61,6 +68,7 @@ class AccountRepositoryIT {
 	}
 
 	@Test
+	@Order(4)
 	void testRecordData() {
 
 		// GIVEN
@@ -77,6 +85,7 @@ class AccountRepositoryIT {
 	}
 
 	@Test
+	@Order(5)
 	void testDeleteRecordById() {
 
 		// THEN
@@ -85,6 +94,7 @@ class AccountRepositoryIT {
 	}
 
 	@Test
+	@Order(6)
 	void testDeleteRecordById_ThrowEmptyResultDataAccessException() {
 
 		// THEN
@@ -95,6 +105,7 @@ class AccountRepositoryIT {
 	}
 
 	@Test
+	@Order(7)
 	void testDeleteRecord() {
 
 		// GIVEN
@@ -114,6 +125,7 @@ class AccountRepositoryIT {
 	}
 
 	@Test
+	@Order(8)
 	void testCountData() {
 
 		// THEN
@@ -122,6 +134,7 @@ class AccountRepositoryIT {
 	}
 
 	@Test
+	@Order(9)
 	void testExistById_True() {
 
 		// THEN
@@ -130,6 +143,7 @@ class AccountRepositoryIT {
 	}
 
 	@Test
+	@Order(10)
 	void testExistById_False() {
 
 		// THEN

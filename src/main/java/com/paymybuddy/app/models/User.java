@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -29,6 +30,11 @@ public class User {
 	private String phone;
 
 	private String mail;
+
+	private String password;
+
+	@OneToOne(mappedBy = "accountOwner")
+	Account accountUser;
 
 	// getters & setters
 	public Integer getUserId() {
@@ -85,6 +91,22 @@ public class User {
 
 	public void setMail(String mail) {
 		this.mail = mail;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Account getAccountUser() {
+		return accountUser;
+	}
+
+	public void setAccountUser(Account accountUser) {
+		this.accountUser = accountUser;
 	}
 
 }

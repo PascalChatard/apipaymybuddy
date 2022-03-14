@@ -2,7 +2,9 @@ package com.paymybuddy.app.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -111,19 +113,15 @@ class UserRepositoryIT {
 		assertThatExceptionOfType(DataIntegrityViolationException.class).isThrownBy(() -> userRepository.save(user));
 	}
 
-//	@Test
-//	@Order(6)
-////	@Rollback(false)
-////	@Modifying
-////	@Transactional
-//	void testDeleteRecordById() {
-//		userRepository.deleteById(1);
-//
-//		// THEN
-//		// assertDoesNotThrow(() -> userRepository.deleteById(1));
-//		// assertThat(userRepository.existsById(1)).isFalse();
-//		assertThat(userRepository.findById(1)).isNull();
-//	}
+	@Test
+	@Order(6)
+	void testDeleteRecordById() {
+
+		// THEN
+		assertDoesNotThrow(() -> userRepository.deleteById(1));
+		assertThat(userRepository.existsById(1)).isFalse();
+		assertThat(userRepository.findById(1)).isEmpty();
+	}
 
 	@Test
 	@Order(7)
@@ -136,25 +134,25 @@ class UserRepositoryIT {
 				.isThrownBy(() -> userRepository.deleteById(1000));
 	}
 
-//	@Test
-//	@Order(8)
-//	void testDeleteRecord() {
-//
-//		// GIVEN
-//		// check first record
-//		Optional<User> optUser = userRepository.findById(1);
-//		User user = optUser.get();
-//		assertThat(user).isNotNull();
-//
-//		// WHEN
-//		userRepository.delete(user);
-//
-//		// THEN
-//		// check that get optional with finding record with ID 1 throws an exception
-//		assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(() -> userRepository.findById(1).get());
-//		// check that finding record with ID 1 return empty optional
-//		assertThat(userRepository.findById(1)).isEmpty();
-//	}
+	@Test
+	@Order(8)
+	void testDeleteRecord() {
+
+		// GIVEN
+		// check first record
+		Optional<User> optUser = userRepository.findById(1);
+		User user = optUser.get();
+		assertThat(user).isNotNull();
+
+		// WHEN
+		userRepository.delete(user);
+
+		// THEN
+		// check that get optional with finding record with ID 1 throws an exception
+		assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(() -> userRepository.findById(1).get());
+		// check that finding record with ID 1 return empty optional
+		assertThat(userRepository.findById(1)).isEmpty();
+	}
 
 	@Test
 	@Order(9)

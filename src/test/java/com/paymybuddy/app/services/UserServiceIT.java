@@ -89,38 +89,37 @@ class UserServiceIT {
 	}
 
 
-//	@Test
-//	@Order(5)
-//	void testDeleteRecordById() {
-//
-//		// GIVEN
-//		Optional<User> optUser = userService.findById(1);
-//		assertThat(optUser).isNotEmpty();
-//		User user = optUser.get();
-//
-//		// WHEN
-//		userService.deleteById(user.getUserId());
-//
-//		// THEN
-//		assertThat(userService.existsById(1)).isFalse();
-//	}
-//
-//
-//	@Test
-//	@Order(6)
-//	void testDeleteRecordByEntity() {
-//
-//		// GIVEN
-//		Optional<User> optUser = userService.findById(1);
-//		assertThat(optUser).isNotEmpty();
-//		User user = optUser.get();
-//
-//		// WHEN
-//		userService.delete(user);
-//
-//		// THEN
-//		assertThat(userService.existsById(user.getUserId())).isFalse();
-//	}
+	@Test
+	@Order(5)
+	void testDeleteRecordById() {
+
+		// GIVEN
+		Optional<User> optUser = userService.findById(1);
+		assertThat(optUser).isNotEmpty();
+		User user = optUser.get();
+
+		// WHEN
+		userService.deleteById(user.getUserId());
+
+		// THEN
+		assertThat(userService.existsById(1)).isFalse();
+	}
+
+	@Test
+	@Order(6)
+	void testDeleteRecordByEntity() {
+
+		// GIVEN
+		Optional<User> optUser = userService.findById(1);
+		assertThat(optUser).isNotEmpty();
+		User user = optUser.get();
+
+		// WHEN
+		userService.delete(user);
+
+		// THEN
+		assertThat(userService.existsById(user.getUserId())).isFalse();
+	}
 
 
 	@Test

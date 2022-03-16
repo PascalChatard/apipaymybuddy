@@ -17,6 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "account")
 public class Account {
@@ -39,46 +42,8 @@ public class Account {
 	@JoinColumn(name = "user_id")
 	User accountOwner;
 
-	// getters & setters
-
-	public Integer getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(Integer accountId) {
-		this.accountId = accountId;
-	}
-
-	public Date getOpenDate() {
-		return openDate;
-	}
-
-	public void setOpenDate(Date openDate) {
-		this.openDate = openDate;
-	}
-
-	public double getSolde() {
-		return solde;
-	}
-
-	public void setSolde(double solde) {
-		this.solde = solde;
-	}
-
-	public List<Transfer> getTransfers() {
-		return transfers;
-	}
-
-	public void setTransfers(List<Transfer> transfers) {
-		this.transfers = transfers;
-	}
-
-	public User getAccountOwner() {
-		return accountOwner;
-	}
-
-	public void setAccountOwner(User accountOwner) {
-		this.accountOwner = accountOwner;
-	}
+//	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+//	@JoinTable(name = "user_account", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+//	private List<User> connections = new ArrayList<>();
 
 }

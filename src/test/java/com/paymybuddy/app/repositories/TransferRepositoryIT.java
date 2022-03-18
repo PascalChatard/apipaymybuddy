@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -74,7 +74,7 @@ class TransferRepositoryIT {
 	void testRecordData() {
 
 		// GIVEN
-		Date date = Date.valueOf("2022-01-02");
+		Timestamp date = Timestamp.valueOf("2022-01-02 00:00:00");
 		Transfer transfer = new Transfer();
 		transfer.setDate(date);
 		transfer.setDescription("Remboursement de qqch");

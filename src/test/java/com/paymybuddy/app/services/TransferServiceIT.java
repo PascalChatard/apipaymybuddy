@@ -3,7 +3,7 @@ package com.paymybuddy.app.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -71,7 +71,7 @@ class TransferServiceIT {
 	void testSaveEntity() {
 
 		// GIVEN
-		Date date = Date.valueOf("2021-08-02");
+		Timestamp date = Timestamp.valueOf("2021-02-08 00:00:00");
 
 		Transfer transfer = new Transfer();
 		transfer.setDate(date);

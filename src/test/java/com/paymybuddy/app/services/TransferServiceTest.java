@@ -6,7 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -40,7 +40,7 @@ class TransferServiceTest {
 	void setUp() throws Exception {
 
 		closeable = MockitoAnnotations.openMocks(this);
-		Date date = Date.valueOf("2021-08-02");
+		Timestamp date = Timestamp.valueOf("2021-02-08 00:00:00");
 		transfer = new Transfer();
 		transfer.setTransferId(1);
 		transfer.setDate(date);

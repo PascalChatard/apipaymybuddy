@@ -12,7 +12,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -23,6 +26,7 @@ import com.paymybuddy.app.models.Account;
 import com.paymybuddy.app.repositories.AccountRepository;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AccountServiceTest {
 
 	@Mock
@@ -57,6 +61,7 @@ class AccountServiceTest {
 
 
 	@Test
+	@Order(1)
 	void injectedComponentIsNotNull() {
 		assertThat(mockRepository).isNotNull();
 		assertThat(accountService).isNotNull();
@@ -64,6 +69,7 @@ class AccountServiceTest {
 
 
 	@Test
+	@Order(2)
 	void testFetchAllData() {
 		// GIVEN
 		when(mockRepository.findAll()).thenReturn(accounts);
@@ -81,6 +87,7 @@ class AccountServiceTest {
 	}
 
 
+	@Order(3)
 	@Test
 	void testFetchRecord() {
 
@@ -100,6 +107,7 @@ class AccountServiceTest {
 
 
 	@Test
+	@Order(4)
 	void testDeleteRecordById() {
 
 		// WHEN
@@ -112,6 +120,7 @@ class AccountServiceTest {
 
 
 	@Test
+	@Order(5)
 	void testDeleteRecord() {
 
 		// WHEN
@@ -124,6 +133,7 @@ class AccountServiceTest {
 
 
 	@Test
+	@Order(6)
 	void testCountData() {
 
 		// GIVEN
@@ -139,6 +149,7 @@ class AccountServiceTest {
 	}
 
 	@Test
+	@Order(7)
 	void testExistById_True() {
 
 		// GIVEN
@@ -155,6 +166,7 @@ class AccountServiceTest {
 
 
 	@Test
+	@Order(8)
 	void testExistById_False() {
 		// GIVEN
 		when(mockRepository.existsById(ArgumentMatchers.anyInt())).thenReturn(false);

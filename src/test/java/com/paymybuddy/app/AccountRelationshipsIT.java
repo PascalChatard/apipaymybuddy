@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -56,11 +57,11 @@ class AccountRelationshipsIT {
 		assertEquals(account.getAccountOwner().getPassword(), "jean2022");
 
 		assertThat(account.getTransfers()).isNotNull();
-		assertEquals(account.getTransfers().get(0).getDate(), Date.valueOf("2022-01-10"));
+		assertEquals(account.getTransfers().get(0).getDate(), Timestamp.valueOf("2022-01-10 00:00:00"));
 		assertEquals(account.getTransfers().get(0).getDescription(), "Recharge café");
 		assertEquals(account.getTransfers().get(0).getAmount(), 5.25);
 
-		assertEquals(account.getTransfers().get(1).getDate(), Date.valueOf("2022-01-10"));
+		assertEquals(account.getTransfers().get(1).getDate(), Timestamp.valueOf("2022-01-10 01:25:00"));
 		assertEquals(account.getTransfers().get(1).getDescription(), "Paiement rufus");
 		assertEquals(account.getTransfers().get(1).getAmount(), 37.95);
 
@@ -92,11 +93,11 @@ class AccountRelationshipsIT {
 		assertThat(user.getAccountUser().getTransfers()).isNotNull();
 		assertThat(user.getAccountUser().getTransfers().size()).isEqualTo(2);
 
-		assertEquals(user.getAccountUser().getTransfers().get(0).getDate(), Date.valueOf("2022-01-02"));
+		assertEquals(user.getAccountUser().getTransfers().get(0).getDate(), Timestamp.valueOf("2022-01-02 00:00:00"));
 		assertEquals(user.getAccountUser().getTransfers().get(0).getDescription(), "Remboursement ciné");
 		assertEquals(user.getAccountUser().getTransfers().get(0).getAmount(), 15.05);
 
-		assertEquals(user.getAccountUser().getTransfers().get(1).getDate(), Date.valueOf("2022-01-02"));
+		assertEquals(user.getAccountUser().getTransfers().get(1).getDate(), Timestamp.valueOf("2022-01-02 00:00:00"));
 		assertEquals(user.getAccountUser().getTransfers().get(1).getDescription(), "Participation cadeau");
 		assertEquals(user.getAccountUser().getTransfers().get(1).getAmount(), 5.50);
 

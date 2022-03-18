@@ -1,7 +1,6 @@
 package com.paymybuddy.app.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Timestamp;
 import java.util.Optional;
@@ -45,9 +44,10 @@ class TransferServiceIT {
 		assertThat(transfer).isNotNull();
 		assertThat(transfer.getTransferId()).isNotNull();
 		assertThat(transfer.getTransferId()).isEqualTo(1);
-		assertEquals(transfer.getDate().toString(), "2022-01-02");
-		assertEquals(transfer.getAmount(), 15.05);
-		assertEquals(transfer.getDescription(), "Remboursement ciné");
+		assertThat(transfer.getDate()).isEqualTo(Timestamp.valueOf("2022-01-02 00:00:00"));
+
+		assertThat(transfer.getAmount()).isEqualTo(15.05);
+		assertThat(transfer.getDescription()).isEqualTo("Remboursement ciné");
 	}
 
 

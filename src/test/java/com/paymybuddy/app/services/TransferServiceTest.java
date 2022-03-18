@@ -12,7 +12,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -23,6 +26,7 @@ import com.paymybuddy.app.models.Transfer;
 import com.paymybuddy.app.repositories.TransferRepository;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TransferServiceTest {
 
 	@Mock
@@ -58,6 +62,7 @@ class TransferServiceTest {
 
 
 	@Test
+	@Order(1)
 	void injectedComponentIsNotNull() {
 		assertThat(mockRepository).isNotNull();
 		assertThat(transferService).isNotNull();
@@ -65,6 +70,7 @@ class TransferServiceTest {
 
 
 	@Test
+	@Order(2)
 	void testFetchAllData() {
 		// GIVEN
 		when(mockRepository.findAll()).thenReturn(transfers);
@@ -83,6 +89,7 @@ class TransferServiceTest {
 
 
 	@Test
+	@Order(3)
 	void testFetchRecord() {
 
 		// GIVEN
@@ -101,6 +108,7 @@ class TransferServiceTest {
 
 
 	@Test
+	@Order(4)
 	void testRecordData() {
 
 		// GIVEN
@@ -117,6 +125,7 @@ class TransferServiceTest {
 
 
 	@Test
+	@Order(5)
 	void testDeleteRecordById() {
 
 		// WHEN
@@ -129,6 +138,7 @@ class TransferServiceTest {
 
 
 	@Test
+	@Order(6)
 	void testDeleteRecord() {
 
 		// WHEN
@@ -141,6 +151,7 @@ class TransferServiceTest {
 
 
 	@Test
+	@Order(7)
 	void testCountData() {
 
 		// GIVEN
@@ -156,6 +167,7 @@ class TransferServiceTest {
 	}
 
 	@Test
+	@Order(8)
 	void testExistById_True() {
 
 		// GIVEN
@@ -171,6 +183,7 @@ class TransferServiceTest {
 	}
 
 	@Test
+	@Order(9)
 	void testExistById_False() {
 		// GIVEN
 		when(mockRepository.existsById(ArgumentMatchers.anyInt())).thenReturn(false);

@@ -64,7 +64,7 @@ class TransferRepositoryIT {
 		// check attibuts values
 		Transfer transfer = optTransfer.get();
 		assertThat(transfer.getTransferId()).isEqualTo(1);
-		assertThat(transfer.getDate()).isEqualTo("2022-01-02");
+		assertThat(transfer.getDate()).isEqualTo(Timestamp.valueOf("2022-01-02 00:00:00"));
 		assertEquals(transfer.getDescription(), "Remboursement ciné");
 		assertEquals(transfer.getAmount(), 15.05);
 	}

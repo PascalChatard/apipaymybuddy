@@ -22,16 +22,16 @@ public class AccountService {
 		return accountRepository.findAll();
 	}
 
-	public Account save(Account user) {
-		return accountRepository.save(user);
+	public Account save(Account account) {
+		return accountRepository.save(account);
 	}
 
 	public void deleteById(Integer accountId) {
 		accountRepository.deleteById(accountId);
 	}
 
-	public void delete(Account user) {
-		accountRepository.delete(user);
+	public void delete(Account account) {
+		accountRepository.delete(account);
 	}
 
 	public boolean existsById(Integer accountId) {

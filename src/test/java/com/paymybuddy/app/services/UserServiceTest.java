@@ -47,6 +47,7 @@ class UserServiceTest {
 		user.setCity("marseille");
 		user.setPhone("0632467802");
 		user.setMail("durand.jean@aol.com");
+		user.setPassword("jean2022");
 
 		users = Arrays.asList(user);
 	}
@@ -183,4 +184,76 @@ class UserServiceTest {
 		verify(mockRepository, times(1)).existsById(15);
 		verifyNoMoreInteractions(mockRepository);
 	}
+
+	@Test
+	void testCreateUserSuccessfully() {
+
+		// GIVEN
+		when(mockRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
+
+		// WHEN
+		boolean retCreateUser = userService.createUser(user);
+
+		// THEN
+		assertThat(retCreateUser).isTrue();
+	}
+
+	@Test
+	void testCreateUserWithoutSuccess_WhenAtLeastOneAttributeIsEmpty() {
+
+		// GIVEN
+		user.setAddress("");
+		when(mockRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
+
+		// WHEN
+		boolean retCreateUser = userService.createUser(user);
+
+		// THEN
+		assertThat(retCreateUser).isFalse();
+	}
+
+	@Test
+	void testExistByEmail_True() {
+		// GIVEN
+		when(mockRepository.existsByEmail(ArgumentMatchers.any(String.class))).thenReturn(1);
+
+		// WHEN
+		boolean existUser = userService.existsByEmail("durand.jean@aol.com");
+
+		// THEN
+		assertThat(existUser).isTrue();
+		verify(mockRepository, times(1)).existsByEmail("durand.jean@aol.com");
+		verifyNoMoreInteractions(mockRepository);
+	}
+
+	@Test
+	void testExistByEmail_False() {
+		// GIVEN
+		when(mockRepository.existsByEmail(ArgumentMatchers.any(String.class))).thenReturn(0);
+
+		// WHEN
+		boolean existUser = userService.existsByEmail("durand.jean@aol.fr");
+
+		// THEN
+		assertThat(existUser).isFalse();
+		verify(mockRepository, times(1)).existsByEmail("durand.jean@aol.fr");
+		verifyNoMoreInteractions(mockRepository);
+	}
+
+	@Test
+	void testCreateUserWithoutSuccess_WhenEmaiAttributeAlreadyExist() {
+
+		// GIVEN
+		user.setMail("alejeune@outlook.com");
+		when(mockRepository.existsByEmail(ArgumentMatchers.any(String.class))).thenReturn(1);
+		when(mockRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
+
+		// WHEN
+		boolean retCreateUser = userService.createUser(user);
+
+		// THEN
+		assertThat(retCreateUser).isFalse();
+	}
+
+
 }

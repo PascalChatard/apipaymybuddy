@@ -37,7 +37,7 @@ SELECT * FROM `user`;
 CREATE TABLE `account` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `opendate` DATE DEFAULT '1970-01-01',
-  `solde` DOUBLE DEFAULT NULL,	
+  `solde` DOUBLE(6,2) DEFAULT NULL,	
   `user_id` int DEFAULT NULL,	
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -83,11 +83,12 @@ SELECT * FROM `user_account`;
 CREATE TABLE `rate` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `value` DOUBLE DEFAULT NULL,
+  `description` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-INSERT INTO `rate` VALUES (1,0.5);
+INSERT INTO `rate` VALUES (1,0.5,'Taux rémunération standard');
 
 
 SELECT * FROM `rate`;
@@ -102,6 +103,7 @@ CREATE TABLE `transfer` (
   `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `description` VARCHAR(255),
   `amount` DOUBLE NOT NULL,
+  `cost` DOUBLE NOT NULL,
   `debited_account_id` int DEFAULT NULL,
   `credited_account_id` int DEFAULT NULL,
   `rate_id` int DEFAULT NULL,
@@ -115,12 +117,12 @@ CREATE TABLE `transfer` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-INSERT INTO `transfer` VALUES  (1, '2022-01-02 00:00:00','Remboursement ciné',15.05,2,3,1), 
-                               (2, '2022-01-02 00:00:00','Participation cadeau',5.50,2,1,1), 
-							   (3, '2022-01-05 00:00:00','Art de vie',22.75,3,1,1), 
-							   (4, '2022-01-07 00:00:00','Cafet Crous',7.20,3,2,1),
-                               (5, '2022-01-10 00:00:00','Recharge café',5.25,1,2,1),
-							   (6, '2022-01-10 01:25:00','Paiement rufus',37.95,1,3,1);
+INSERT INTO `transfer` VALUES  (1, '2022-01-02 00:00:00','Remboursement ciné',15.05, 0.08,2,3,1), 
+                               (2, '2022-01-02 00:00:00','Participation cadeau',5.50, 0.03,2,1,1), 
+							   (3, '2022-01-05 00:00:00','Art de vie',22.75,0.11,3,1,1), 
+							   (4, '2022-01-07 00:00:00','Cafet Crous',7.20,0.04,3,2,1),
+                               (5, '2022-01-10 00:00:00','Recharge café',5.25,0.03,1,2,1),
+							   (6, '2022-01-10 01:25:00','Paiement rufus',37.95,0.19,1,3,1);
 
 
 SELECT * FROM `transfer`;

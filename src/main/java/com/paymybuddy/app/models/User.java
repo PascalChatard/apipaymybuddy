@@ -37,7 +37,7 @@ public class User {
 
 	private String password;
 
-	@OneToOne(mappedBy = "accountOwner", cascade = CascadeType.REMOVE)
+	@OneToOne(mappedBy = "accountOwner", cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
 	Account accountUser;
 
 }

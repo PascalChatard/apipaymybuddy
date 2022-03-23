@@ -1,9 +1,12 @@
 package com.paymybuddy.app.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.sql.Timestamp;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -88,6 +91,7 @@ class TransferServiceIT {
 
 
 	@Test
+	@Transactional
 	@Order(5)
 	void testDeleteRecordById() {
 
@@ -97,14 +101,15 @@ class TransferServiceIT {
 		Transfer transfer = optTransfer.get();
 
 		// WHEN
-		transferService.deleteById(transfer.getTransferId());
+		assertDoesNotThrow(() -> transferService.deleteById(transfer.getTransferId()));
 
 		// THEN
-		assertThat(transferService.existsById(1)).isFalse();
+		assertThat(transferService.findById(1)).isEmpty();
 	}
 
 
 	@Test
+	@Transactional
 	@Order(6)
 	void testDeleteRecordByEntity() {
 
@@ -117,7 +122,7 @@ class TransferServiceIT {
 		transferService.delete(transfer);
 
 		// THEN
-		assertThat(transferService.existsById(transfer.getTransferId())).isFalse();
+		assertThat(transferService.findById(1)).isEmpty();
 	}
 
 	@Test

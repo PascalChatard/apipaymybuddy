@@ -1,9 +1,14 @@
 package com.paymybuddy.app.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -11,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.paymybuddy.app.models.User;
@@ -153,6 +159,127 @@ class UserServiceIT {
 
 		// THEN
 		assertThat(existUser).isFalse();
+	}
+
+	@Test
+	@Order(10)
+	void testSaveEntityThrowDataIntegrityViolationException() {
+
+		// GIVEN
+		User user = new User();
+		user.setFirstName("leroi");
+		user.setLastName("merlin");
+		user.setAddress("7 rue bricolos");
+		user.setCity("nice");
+		user.setPhone("0493556231");
+		user.setMail("alejeune@outlook.com");
+
+		// THEN
+		// check that save a user with a mail already exist in DB throws an
+		// exception
+		assertThatExceptionOfType(DataIntegrityViolationException.class).isThrownBy(() -> userService.save(user));
+	}
+
+	@Test
+	@Order(11)
+	void accessAccountAndTransfersDataFromUserEntityTest() {
+
+		// WHEN
+		Optional<User> optUser = userService.findById(2);
+
+		// THEN
+		assertThat(optUser).isNotEmpty();
+		User user = optUser.get();
+		// user informations
+		assertEquals(user.getLastName(), "louis");
+		assertEquals(user.getFirstName(), "dupont");
+		assertEquals(user.getAddress(), "15 rue du rouget");
+		assertEquals(user.getCity(), "aix-en-provence");
+		assertEquals(user.getPhone(), "0745235889");
+		assertEquals(user.getMail(), "dupontlouis@hotmail.fr");
+		assertEquals(user.getPassword(), "louis2022");
+		// account informations
+		assertThat(user.getAccountUser()).isNotNull();
+		assertThat(user.getAccountUser().getAccountId()).isEqualTo(2);
+		assertThat(user.getAccountUser().getOpenDate()).isEqualTo(Date.valueOf("2021-11-22"));
+		assertThat(user.getAccountUser().getSolde()).isEqualTo(25.50);
+		// transfer informations
+		assertThat(user.getAccountUser().getTransfers()).isNotNull();
+		assertThat(user.getAccountUser().getTransfers().size()).isEqualTo(2);
+
+		assertEquals(user.getAccountUser().getTransfers().get(0).getDate(), Timestamp.valueOf("2022-01-02 00:00:00"));
+		assertEquals(user.getAccountUser().getTransfers().get(0).getDescription(), "Remboursement ciné");
+		assertEquals(user.getAccountUser().getTransfers().get(0).getAmount(), 15.05);
+
+		assertEquals(user.getAccountUser().getTransfers().get(1).getDate(), Timestamp.valueOf("2022-01-02 00:00:00"));
+		assertEquals(user.getAccountUser().getTransfers().get(1).getDescription(), "Participation cadeau");
+		assertEquals(user.getAccountUser().getTransfers().get(1).getAmount(), 5.50);
+
+		assertThat(user.getAccountUser().getConnections()).isNotNull();
+		assertThat(user.getAccountUser().getConnections()).hasSize(1);
+		assertEquals(user.getAccountUser().getConnections().get(0).getLastName(), "alain");
+		assertEquals(user.getAccountUser().getConnections().get(0).getFirstName(), "Lejeune");
+		assertEquals(user.getAccountUser().getConnections().get(0).getAddress(), "32 avenue léon bloum");
+		assertEquals(user.getAccountUser().getConnections().get(0).getCity(), "pertuis");
+		assertEquals(user.getAccountUser().getConnections().get(0).getPhone(), "0490255633");
+		assertEquals(user.getAccountUser().getConnections().get(0).getMail(), "alejeune@outlook.com");
+		assertEquals(user.getAccountUser().getConnections().get(0).getPassword(), "alain2022");
+
+	}
+
+	@Test
+	@Transactional
+	@Order(12)
+	void createUserAndAccountTest() {
+
+		// GIVEN
+
+		// new user
+		User user = new User();
+		user.setFirstName("annie");
+		user.setLastName("Legrand");
+		user.setAddress("9 rue Donjon");
+		user.setCity("perpignan");
+		user.setPhone("0593556231");
+		user.setMail("annie.legrand@outlook.com");
+		user.setPassword("annie2022");
+
+		Date date = new Date(System.currentTimeMillis());
+
+		// WHEN
+		boolean retCreateUser = userService.createUser(user);
+
+		// THEN
+		assertThat(retCreateUser).isTrue();
+
+		Iterable<User> users = userService.findByLastname("Legrand");
+		// check if there are records
+		assertThat(users).isNotNull();
+		assertThat(users).doesNotContainNull();
+		assertThat(users).size().isGreaterThan(0);
+		assertThat(users).size().isEqualTo(1);
+
+		// user informations
+		assertEquals(users.iterator().next().getFirstName(), user.getFirstName().toUpperCase());
+		assertEquals(users.iterator().next().getLastName(), user.getLastName().toUpperCase());
+		assertEquals(users.iterator().next().getAddress(), user.getAddress().toUpperCase());
+		assertEquals(users.iterator().next().getCity(), user.getCity().toUpperCase());
+		assertEquals(users.iterator().next().getPhone(), user.getPhone());
+		assertEquals(users.iterator().next().getMail(), user.getMail());
+		assertEquals(users.iterator().next().getPassword(), user.getPassword());
+		// account informations
+		assertThat(users.iterator().next().getAccountUser()).isNotNull();
+		assertThat(users.iterator().next().getAccountUser().getOpenDate()).isEqualTo(Date.valueOf(date.toString()));
+		assertThat(users.iterator().next().getAccountUser().getSolde()).isEqualTo(0);
+
+		// connections informations
+		assertThat(users.iterator().next().getAccountUser().getConnections()).isNotNull();
+		assertThat(user.getAccountUser().getConnections()).hasSize(0);
+
+		// transfer information
+		assertThat(user.getAccountUser().getTransfers()).isNotNull();
+		assertThat(user.getAccountUser().getTransfers().size()).isEqualTo(0);
+
 	}
 
 }

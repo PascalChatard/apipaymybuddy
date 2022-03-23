@@ -20,7 +20,6 @@ import org.springframework.test.context.jdbc.Sql;
 import com.paymybuddy.app.models.User;
 
 @Sql("data.sql")
-//@DataJpaTest
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserRepositoryIT {
@@ -179,6 +178,17 @@ class UserRepositoryIT {
 		// THEN
 		// there are three records in database and ID's are (1,2,3)
 		assertThat(userRepository.existsById(100)).isFalse();
+	}
+
+	@Test
+	@Order(12)
+	void testExistsByEmail() {
+
+		// THEN
+		// there is at most one user with this email in database
+		assertThat(userRepository.existsByEmail("alejeune@outlook.com")).isEqualTo(1);
+		// there is no user with this email in database
+		assertThat(userRepository.existsByEmail("alejeune@outlook.fr")).isEqualTo(0);
 	}
 
 }

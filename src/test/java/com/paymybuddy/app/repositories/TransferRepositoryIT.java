@@ -9,6 +9,8 @@ import java.sql.Timestamp;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -70,6 +72,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Transactional
 	@Order(4)
 	void testRecordData() {
 
@@ -93,7 +96,6 @@ class TransferRepositoryIT {
 
 		// THEN
 		assertDoesNotThrow(() -> transferRepository.deleteById(1));
-		assertThat(transferRepository.existsById(1)).isFalse();
 	}
 
 	@Test
@@ -108,6 +110,7 @@ class TransferRepositoryIT {
 	}
 
 	@Test
+	@Transactional
 	@Order(7)
 	void testDeleteRecord() {
 

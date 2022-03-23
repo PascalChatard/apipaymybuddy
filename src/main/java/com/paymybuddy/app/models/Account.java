@@ -13,9 +13,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import lombok.Data;
 
@@ -34,16 +39,18 @@ public class Account {
 
 	private double solde;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "debited_account_id")
-	List<Transfer> transfers = new ArrayList<>();
-
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	User accountOwner;
 
-//	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-//	@JoinTable(name = "user_account", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-//	private List<User> connections = new ArrayList<>();
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_account", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<User> connections = new ArrayList<>();
+
+	@OneToMany(cascade = { CascadeType.MERGE, 
+			CascadeType.REMOVE }, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JoinColumn(name = "debited_account_id")
+	List<Transfer> transfers = new ArrayList<>();
 
 }

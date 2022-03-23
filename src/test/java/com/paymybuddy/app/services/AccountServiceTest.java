@@ -1,6 +1,7 @@
 package com.paymybuddy.app.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -25,12 +26,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.paymybuddy.app.models.Account;
 import com.paymybuddy.app.repositories.AccountRepository;
 
+
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AccountServiceTest {
 
 	@Mock
 	private AccountRepository mockRepository;
+
 	private AutoCloseable closeable;
 
 	@InjectMocks
@@ -39,11 +42,11 @@ class AccountServiceTest {
 	Account account;
 	Iterable<Account> accounts;
 
-
 	@BeforeEach
 	void setUp() throws Exception {
 
 		closeable = MockitoAnnotations.openMocks(this);
+
 		Date date = Date.valueOf("2022-01-23");
 		account = new Account();
 		account.setAccountId(1);
@@ -110,6 +113,9 @@ class AccountServiceTest {
 	@Order(4)
 	void testDeleteRecordById() {
 
+		// GIVEN
+		doNothing().doThrow(new RuntimeException()).when(mockRepository).deleteById(ArgumentMatchers.anyInt());
+
 		// WHEN
 		accountService.deleteById(1);
 
@@ -122,6 +128,9 @@ class AccountServiceTest {
 	@Test
 	@Order(5)
 	void testDeleteRecord() {
+
+		// GIVEN
+		doNothing().doThrow(new RuntimeException()).when(mockRepository).delete(ArgumentMatchers.any(Account.class));
 
 		// WHEN
 		accountService.delete(account);

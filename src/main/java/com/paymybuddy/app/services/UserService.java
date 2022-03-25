@@ -1,7 +1,6 @@
 package com.paymybuddy.app.services;
 
 import java.sql.Date;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,41 +10,13 @@ import com.paymybuddy.app.models.User;
 import com.paymybuddy.app.repositories.UserRepository;
 
 @Service
-public class UserService {
+public class UserService extends GenericService<User> {
 
 	@Autowired
 	UserRepository userRepository;
 
-	public Optional<User> findById(Integer userId) {
-		return userRepository.findById(userId);
-	}
-
 	public Iterable<User> findByLastname(String lastname) {
 		return userRepository.findByLastName(lastname);
-	}
-
-	public Iterable<User> findAll() {
-		return userRepository.findAll();
-	}
-
-	public User save(User user) {
-		return userRepository.save(user);
-	}
-
-	public void deleteById(Integer userId) {
-		userRepository.deleteById(userId);
-	}
-
-	public void delete(User user) {
-		userRepository.delete(user);
-	}
-
-	public boolean existsById(Integer userId) {
-		return userRepository.existsById(userId);
-	}
-
-	public long count() {
-		return userRepository.count();
 	}
 
 	public boolean existsByEmail(String mail) {
@@ -78,7 +49,7 @@ public class UserService {
 
 		user.setAccountUser(account);
 
-		return userRepository.save(user).equals(user);
+		return save(user).equals(user);
 	}
 
 	private boolean atLeastOneAttributeIsEmpty(User user) {

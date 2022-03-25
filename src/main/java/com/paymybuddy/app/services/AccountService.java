@@ -1,50 +1,17 @@
 package com.paymybuddy.app.services;
 
 import java.sql.Timestamp;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paymybuddy.app.models.Account;
 import com.paymybuddy.app.models.Rate;
 import com.paymybuddy.app.models.Transfer;
 import com.paymybuddy.app.models.User;
-import com.paymybuddy.app.repositories.AccountRepository;
 
 @Service
-public class AccountService {
+public class AccountService extends GenericService<Account> {
 
-	@Autowired
-	AccountRepository accountRepository;
-
-	public Optional<Account> findById(Integer accountId) {
-		return accountRepository.findById(accountId);
-	}
-
-	public Iterable<Account> findAll() {
-		return accountRepository.findAll();
-	}
-
-	public Account save(Account account) {
-		return accountRepository.save(account);
-	}
-
-	public void deleteById(Integer accountId) {
-		accountRepository.deleteById(accountId);
-	}
-
-	public void delete(Account account) {
-		accountRepository.delete(account);
-	}
-
-	public boolean existsById(Integer accountId) {
-		return accountRepository.existsById(accountId);
-	}
-
-	public long count() {
-		return accountRepository.count();
-	}
 
 	public Account makeTransfer(Account debitedAccount, User beneficiaryUser, String descriptionTransfer,
 			double amount, Rate rate) {

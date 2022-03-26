@@ -47,7 +47,7 @@ class UserRepositoryIT {
 		// check if there are records
 		assertThat(users).doesNotContainNull();
 		assertThat(users).size().isGreaterThan(0);
-		assertThat(users).size().isEqualTo(3);
+		assertThat(users).size().isEqualTo(4);
 	}
 
 	@Test
@@ -97,8 +97,8 @@ class UserRepositoryIT {
 
 		// GIVEN
 		User user = new User();
-		user.setFirstName("alain");
-		user.setLastName("Lejeune");
+		user.setFirstName("leroi");
+		user.setLastName("merlin");
 		user.setAddress("7 rue bricolos");
 		user.setCity("nice");
 		user.setPhone("0493556231");
@@ -159,7 +159,7 @@ class UserRepositoryIT {
 
 		// THEN
 		// there are three records in database
-		assertThat(userRepository.count()).isEqualTo(3);
+		assertThat(userRepository.count()).isEqualTo(4);
 	}
 
 	@Test

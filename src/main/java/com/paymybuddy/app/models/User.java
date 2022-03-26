@@ -1,6 +1,5 @@
 package com.paymybuddy.app.models;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,7 +36,8 @@ public class User {
 
 	private String password;
 
-	@OneToOne(mappedBy = "accountOwner", cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
+//	@OneToOne(mappedBy = "accountOwner", cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
+	@OneToOne(mappedBy = "accountOwner")
 	Account accountUser;
 
 }

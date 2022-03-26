@@ -19,12 +19,13 @@ CREATE TABLE `user` (
   `mail` varchar(255) NOT NULL UNIQUE,
   `password` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 INSERT INTO `user` VALUES (1,'durand','jean','56 impasse des souris','marseille', '0632467802','durand.jean@aol.com',"jean2022"),
                           (2,'dupont','louis','15 rue du rouget','aix-en-provence', '0745235889','dupontlouis@hotmail.fr',"louis2022"),
-						  (3,'Lejeune','alain','32 avenue léon bloum', 'pertuis', '0490255633','alejeune@outlook.com',"alain2022");
+						  (3,'Lejeune','alain','32 avenue léon bloum', 'pertuis', '0490255633','alejeune@outlook.com',"alain2022"),
+						  (4,'Clegg', 'Johny','17 Lotissement be bop a lula', 'Pertuis','0632251398','clegg.johny@outlook.com','johny2022');
 
 
 SELECT * FROM `user`;
@@ -36,12 +37,12 @@ SELECT * FROM `user`;
 -- -----------------------------------------------------------------------------
 CREATE TABLE `account` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `opendate` DATE DEFAULT '1970-01-01',
-  `solde` DOUBLE(6,2) DEFAULT NULL,	
-  `user_id` int DEFAULT NULL,	
+  `opendate` DATE DEFAULT CURRENT_DATE,
+  `solde` DOUBLE(6,2) DEFAULT 0.0,	
+  `user_id` INT NOT NULL,	
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE    
+  CONSTRAINT  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE   
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -62,7 +63,7 @@ CREATE TABLE `user_account` (
   `account_id` INT NOT NULL,
   KEY `user_id` (`user_id`),
   KEY `account_id` (`account_id`),
-  CONSTRAINT FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,    
+  CONSTRAINT FOREIGN KEY (`user_id`)    REFERENCES `user`    (`id`) ON DELETE CASCADE,    
   CONSTRAINT FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
   PRIMARY KEY (`user_id`,`account_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -111,9 +112,9 @@ CREATE TABLE `transfer` (
   KEY `debited_account_id` (`debited_account_id`),
   KEY `credited_account_id` (`credited_account_id`),
   KEY `rate_id` (`rate_id`),
-  CONSTRAINT FOREIGN KEY (`debited_account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT FOREIGN KEY (`credited_account_id`) REFERENCES `account` (`id`) ON DELETE SET NULL,
-  CONSTRAINT FOREIGN KEY (`rate_id`) REFERENCES `rate` (`id`) ON DELETE NO ACTION    	
+  CONSTRAINT FOREIGN KEY (`debited_account_id`)  REFERENCES `account` (`id`)  ON DELETE CASCADE ON UPDATE RESTRICT,
+  CONSTRAINT FOREIGN KEY (`credited_account_id`) REFERENCES `account` (`id`)  ON DELETE SET NULL ON UPDATE RESTRICT,
+  CONSTRAINT FOREIGN KEY (`rate_id`)             REFERENCES `rate`    (`id`)  ON DELETE RESTRICT ON UPDATE RESTRICT    	
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 

@@ -18,6 +18,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.paymybuddy.app.models.Account;
+import com.paymybuddy.app.models.User;
 
 @SpringBootTest
 @Sql("data.sql")
@@ -26,6 +27,8 @@ class AccountRepositoryIT {
 
 	@Autowired
 	private AccountRepository accountRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 
 	@Test
@@ -72,10 +75,15 @@ class AccountRepositoryIT {
 	void testRecordData() {
 
 		// GIVEN
+		Optional<User> optUser = userRepository.findById(4);
+		assertThat(optUser).isNotEmpty();
+		User user = optUser.get();
+
 		Date date = Date.valueOf("2022-01-23");
 		Account account = new Account();
 		account.setOpenDate(date);
 		account.setSolde(150.85);
+		account.setAccountOwner(user);
 
 		// WHEN
 		Account savedAccount = accountRepository.save(account);

@@ -69,7 +69,7 @@ class UserServiceIT {
 		// check if there are records
 		assertThat(users).doesNotContainNull();
 		assertThat(users).size().isGreaterThan(0);
-		assertThat(users).size().isEqualTo(3);
+		assertThat(users).size().isEqualTo(4);
 	}
 
 
@@ -136,7 +136,7 @@ class UserServiceIT {
 		long nbRecords = userService.count();
 
 		// THEN
-		assertThat(nbRecords).isEqualTo(3);
+		assertThat(nbRecords).isEqualTo(4);
 	}
 
 	@Test

@@ -256,7 +256,6 @@ class AccountServiceIT {
 		assertThat(account.getAccountId()).isNotNull();
 		assertThat(account.getAccountId()).isEqualTo(1);
 		assertEquals(account.getOpenDate().toString(), "2021-12-02");
-//		assertThat(Math.round(modifiedAccount.getSolde() * 100.0) / 100.0).isEqualTo(54.55);
 		assertThat(account.getSolde()).isEqualTo(54.55);
 
 		// verify account owner info
@@ -318,6 +317,9 @@ class AccountServiceIT {
 		assertThat(account.getTransfers().get(2).getRate().getRateId()).isEqualTo(1);
 		assertThat(account.getTransfers().get(2).getRate().getValue()).isEqualTo(0.5);
 		assertThat(account.getTransfers().get(2).getCost()).isEqualTo(0.48);
+
+		// verify solde of credited account
+		assertThat(beneficiaryUser.getAccountUser().getSolde()).isEqualTo(121.40);
 
 	}
 

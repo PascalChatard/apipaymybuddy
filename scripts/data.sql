@@ -39,7 +39,7 @@ CREATE TABLE `account` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `opendate` DATE DEFAULT CURRENT_DATE,
   `solde` DOUBLE(6,2) DEFAULT 0.0,	
-  `user_id` INT NOT NULL,	
+  `user_id` INT DEFAULT NULL,	
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE   

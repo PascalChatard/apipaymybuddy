@@ -27,9 +27,9 @@ class AccountRepositoryIT {
 
 	@Autowired
 	private AccountRepository accountRepository;
+
 	@Autowired
 	private UserRepository userRepository;
-
 
 	@Test
 	@Order(1)
@@ -73,6 +73,7 @@ class AccountRepositoryIT {
 	@Test
 	@Order(4)
 	void testRecordData() {
+
 
 		// GIVEN
 		Optional<User> optUser = userRepository.findById(4);

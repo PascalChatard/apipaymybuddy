@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,7 +40,8 @@ public class Account {
 	private double solde;
 
 //	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
+//	@OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	User accountOwner;
 
@@ -49,9 +51,9 @@ public class Account {
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<User> connections = new ArrayList<>();
 
-//	@OneToMany(cascade = { CascadeType.MERGE, 
-//			CascadeType.REMOVE }, orphanRemoval = true, fetch = FetchType.EAGER)
-	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
+//	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true, fetch = FetchType.EAGER)
+//	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "debited_account_id")
 	List<Transfer> transfers = new ArrayList<>();
 

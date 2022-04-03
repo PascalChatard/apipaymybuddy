@@ -215,28 +215,28 @@ class UserServiceTest {
 	@Test
 	void testExistByEmail_True() {
 		// GIVEN
-		when(mockRepository.existsByEmail(ArgumentMatchers.any(String.class))).thenReturn(1);
+		when(mockRepository.getNumberUserByEmail(ArgumentMatchers.any(String.class))).thenReturn(1);
 
 		// WHEN
 		boolean existUser = userService.existsByEmail("durand.jean@aol.com");
 
 		// THEN
 		assertThat(existUser).isTrue();
-		verify(mockRepository, times(1)).existsByEmail("durand.jean@aol.com");
+		verify(mockRepository, times(1)).getNumberUserByEmail("durand.jean@aol.com");
 		verifyNoMoreInteractions(mockRepository);
 	}
 
 	@Test
 	void testExistByEmail_False() {
 		// GIVEN
-		when(mockRepository.existsByEmail(ArgumentMatchers.any(String.class))).thenReturn(0);
+		when(mockRepository.getNumberUserByEmail(ArgumentMatchers.any(String.class))).thenReturn(0);
 
 		// WHEN
 		boolean existUser = userService.existsByEmail("durand.jean@aol.fr");
 
 		// THEN
 		assertThat(existUser).isFalse();
-		verify(mockRepository, times(1)).existsByEmail("durand.jean@aol.fr");
+		verify(mockRepository, times(1)).getNumberUserByEmail("durand.jean@aol.fr");
 		verifyNoMoreInteractions(mockRepository);
 	}
 
@@ -245,7 +245,7 @@ class UserServiceTest {
 
 		// GIVEN
 		user.setMail("alejeune@outlook.com");
-		when(mockRepository.existsByEmail(ArgumentMatchers.any(String.class))).thenReturn(1);
+		when(mockRepository.getNumberUserByEmail(ArgumentMatchers.any(String.class))).thenReturn(1);
 		when(mockRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
 
 		// WHEN

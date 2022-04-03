@@ -15,19 +15,40 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UserService extends GenericService<User> {
 
+	/**
+	 * Injects user repository bean
+	 */
 	@Autowired
 	UserRepository userRepository;
 
+	/**
+	 * findByLastname - Get users with last name matching given lastname
+	 * 
+	 * @param lastname The lastname of the user to find
+	 * @return A Iterable list of users found
+	 */
 	public Iterable<User> findByLastname(String lastname) {
 		log.debug("Debut methode findByLastname, lastname {}", lastname);
 		return userRepository.findByLastName(lastname);
 	}
 
+	/**
+	 * existsByEmail - Checks that a user with this email exists
+	 * 
+	 * @param mail The e-mail of the user to find
+	 * @return true if user with e-mail found, false in other case
+	 */
 	public boolean existsByEmail(String mail) {
 		log.debug("Debut methode existsByEmail, mail {}", mail);
-		return (userRepository.existsByEmail(mail) > 0) ? true : false;
+		return (userRepository.getNumberUserByEmail(mail) > 0) ? true : false;
 	}
 
+	/**
+	 * createUser - Add new user and associate account in data base
+	 * 
+	 * @param user The new user to add
+	 * @return operation status, true if success, false in other case
+	 */
 	public boolean createUser(User user) {
 
 		log.debug("Debut methode createUser, User {}", user);
@@ -68,6 +89,13 @@ public class UserService extends GenericService<User> {
 
 	}
 
+	/**
+	 * atLeastOneAttributeIsEmpty - Test if at least one attribute is empty
+	 * 
+	 * @param user The object user to test
+	 * @return operation status, true if one or more attribute is empty, false if
+	 *         all attribute are filled
+	 */
 	private boolean atLeastOneAttributeIsEmpty(User user) {
 
 		log.trace("Exécute methode atLeastOneAttributeIsEmpty");

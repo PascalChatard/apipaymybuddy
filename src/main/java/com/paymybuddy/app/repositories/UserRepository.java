@@ -11,9 +11,21 @@ import com.paymybuddy.app.models.User;
 public interface UserRepository extends CrudRepository<User, Integer> {
 
 
+	/**
+	 * findByLastname - Get users with last name matching given name
+	 * 
+	 * @param name The lastname of the user to find
+	 * @return A Iterable list of users found
+	 */
 	public Iterable<User> findByLastName(String name);
 
+	/**
+	 * getNumberUserByEmail - Get number of user with given e-mail
+	 * 
+	 * @param mail The e-mail of the user to find
+	 * @return number of user with this e-mail
+	 */
 	@Query(value = "SELECT COUNT(*) FROM user WHERE mail = ?1", nativeQuery = true)
-	public int existsByEmail(@Param("mail") String mail);
+	public int getNumberUserByEmail(@Param("mail") String mail);
 
 }

@@ -16,27 +16,54 @@ import lombok.Data;
 @Table(name = "user")
 public class User {
 
+	/**
+	 * ID of user table.
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer userId;
 
+	/**
+	 * FirstName of user.
+	 */
 	@Column(name = "firstname")
 	private String firstName;
 
+	/**
+	 * Lastname of user.
+	 */
 	@Column(name = "lastname")
 	private String lastName;
 
+	/**
+	 * Address of user.
+	 */
 	private String address;
 
+	/**
+	 * City of user.
+	 */
 	private String city;
 
+	/**
+	 * Phone of user.
+	 */
 	private String phone;
 
+	/**
+	 * E-mail of user.
+	 */
 	private String mail;
 
+	/**
+	 * Password of user.
+	 */
 	private String password;
 
+	/**
+	 * Account of user.
+	 */
 //	@OneToOne(mappedBy = "accountOwner", cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
 	@OneToOne(mappedBy = "accountOwner", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
 	private Account accountUser;

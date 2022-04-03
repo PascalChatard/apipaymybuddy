@@ -16,6 +16,16 @@ import lombok.extern.slf4j.Slf4j;
 public class AccountService extends GenericService<Account> {
 
 
+	/**
+	 * makeTransfer - Make a money transfer from account to beneficiary user
+	 * 
+	 * @param debitedAccount      The account object to be debited
+	 * @param beneficiaryUser     The beneficiary user object of the transfer
+	 * @param descriptionTransfer Transfer description
+	 * @param amount              Amount of transfer
+	 * @param rate                Transfer rate object of pay
+	 * @return The Account object full filled and updated
+	 */
 	public Account makeTransfer(Account debitedAccount, User beneficiaryUser, String descriptionTransfer,
 			double amount, Rate rate) {
 
@@ -62,11 +72,23 @@ public class AccountService extends GenericService<Account> {
 		return modifiedDebitedAccount;
 	}
 
+	/**
+	 * getDateTimeTransfer - Get the current Timestamp in SQL format
+	 * 
+	 * @return A Timestamp object
+	 */
 	private Timestamp getDateTimeTransfer() {
 		log.trace("Exécute methode getDateTimeTransfer");
 		return new Timestamp(System.currentTimeMillis());
 	}
 
+	/**
+	 * roundToTowSignificantDigits - Get a double type value rounded to 2
+	 * significant digits
+	 * 
+	 * @param value the value to round
+	 * @return The rounded value
+	 */
 	private double roundToTowSignificantDigits(double value) {
 
 		log.trace("Exécute methode roundToTowSignificantDigits");

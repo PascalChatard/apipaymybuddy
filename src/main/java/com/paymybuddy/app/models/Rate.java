@@ -14,13 +14,22 @@ import lombok.Data;
 @Table(name = "rate")
 public class Rate {
 
+	/**
+	 * ID of rate table.
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer rateId;
 
+	/**
+	 * Value of pay rate.
+	 */
 	private double value;
 
+	/**
+	 * Description of pay rate.
+	 */
 	private String description;
 
 }

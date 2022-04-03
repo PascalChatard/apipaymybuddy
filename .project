@@ -33,11 +33,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>src/test/java/com/paymybuddy/app/data.sql</name>
-			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/data.sql</location>
-		</link>
-		<link>
 			<name>src/test/java/com/paymybuddy/app/repositories/data.sql</name>
 			<type>1</type>
 			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/data.sql</location>

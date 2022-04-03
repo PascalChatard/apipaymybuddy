@@ -186,9 +186,9 @@ class UserRepositoryIT {
 
 		// THEN
 		// there is at most one user with this email in database
-		assertThat(userRepository.existsByEmail("alejeune@outlook.com")).isEqualTo(1);
+		assertThat(userRepository.getNumberUserByEmail("alejeune@outlook.com")).isEqualTo(1);
 		// there is no user with this email in database
-		assertThat(userRepository.existsByEmail("alejeune@outlook.fr")).isEqualTo(0);
+		assertThat(userRepository.getNumberUserByEmail("alejeune@outlook.fr")).isEqualTo(0);
 	}
 
 }

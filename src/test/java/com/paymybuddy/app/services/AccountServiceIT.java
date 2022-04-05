@@ -32,6 +32,10 @@ class AccountServiceIT {
 	@Autowired
 	RateService rateService;
 
+	@Autowired
+	UserService userService;
+
+
 	@Test
 	@Order(1)
 	void injectedComponentIsNotNull() {

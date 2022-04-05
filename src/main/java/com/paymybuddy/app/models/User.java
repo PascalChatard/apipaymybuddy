@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 
 @Data
@@ -64,7 +66,8 @@ public class User {
 	/**
 	 * Account of user.
 	 */
-//	@OneToOne(mappedBy = "accountOwner", cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
+	@JsonBackReference // avoid "Could not write JSON: Infinite recursion (StackOverflowError); nested
+						// exception is com.fasterxml.jackson.databind.JsonMappingException"
 	@OneToOne(mappedBy = "accountOwner", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
 	private Account accountUser;
 

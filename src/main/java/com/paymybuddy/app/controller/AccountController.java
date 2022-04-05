@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paymybuddy.app.models.Account;
 import com.paymybuddy.app.services.AccountService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 public class AccountController {
 
@@ -23,12 +26,17 @@ public class AccountController {
 	 * @return An Account object full filled
 	 */
 	@GetMapping("/account/{id}")
-//	@GetMapping(path = "/account/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Account getAccount(@PathVariable("id") final Integer id) {
+		log.debug("Debut methode getAccount, arg: Account Id ({})", id);
+
 		Optional<Account> account = accountService.findById(id);
 		if (account.isPresent()) {
+			log.debug("Fin methode getAccount");
+
 			return account.get();
 		} else {
+			log.debug("Fin methode getAccount");
+
 			return null;
 		}
 	}

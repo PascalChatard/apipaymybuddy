@@ -5,6 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class GenericService<E> {
 
 	/**
@@ -20,7 +23,12 @@ public class GenericService<E> {
 	 * @return An Entity object full filled
 	 */
 	public Optional<E> findById(Integer id) {
-		return repository.findById(id);
+		log.debug("Debut methode findById, arg: entityId ({})", id);
+
+		Optional<E> optEntity = repository.findById(id);
+
+		log.debug("Fin methode findById");
+		return optEntity;
 	}
 
 	/**
@@ -29,7 +37,12 @@ public class GenericService<E> {
 	 * @return - An Iterable object of Entity full filled
 	 */
 	public Iterable<E> findAll() {
-		return repository.findAll();
+		log.debug("Debut methode findAll, sans arg.");
+
+		Iterable<E> iterableEntity = repository.findAll();
+
+		log.debug("Fin methode findAll");
+		return iterableEntity;
 	}
 
 	/**
@@ -39,7 +52,12 @@ public class GenericService<E> {
 	 * @return The entity object saved/updated
 	 */
 	public E save(E entity) {
-		return repository.save(entity);
+		log.debug("Debut methode save, arg: {} ({})", entity.getClass(), entity);
+
+		E entitySaved = repository.save(entity);
+
+		log.debug("Fin methode save");
+		return entitySaved;
 	}
 
 	/**
@@ -48,7 +66,11 @@ public class GenericService<E> {
 	 * @param id - The id of the entity to delete
 	 */
 	public void deleteById(Integer id) {
+		log.debug("Debut methode deleteById, arg: entityId ({})", id);
+
 		repository.deleteById(id);
+
+		log.debug("Fin methode deleteById");
 	}
 
 	/**
@@ -57,7 +79,11 @@ public class GenericService<E> {
 	 * @param entity - The entity to delete
 	 */
 	public void delete(E entity) {
+		log.debug("Debut methode delete, arg: {} ({})", entity.getClass(), entity);
+
 		repository.delete(entity);
+
+		log.debug("Fin methode delete");
 	}
 
 	/**
@@ -67,7 +93,12 @@ public class GenericService<E> {
 	 * @return true if an entity with the given id exists, false otherwise
 	 */
 	public boolean existsById(Integer id) {
-		return repository.existsById(id);
+		log.debug("Debut methode existsById, arg: entityId ({})", id);
+
+		boolean status = repository.existsById(id);
+
+		log.debug("Fin methode existsById");
+		return status;
 	}
 
 	/**
@@ -76,7 +107,12 @@ public class GenericService<E> {
 	 * @return the number of entities
 	 */
 	public long count() {
-		return repository.count();
+		log.debug("Debut methode count, sans arg.");
+
+		long numberOfEntities = repository.count();
+
+		log.debug("Fin methode count");
+		return numberOfEntities;
 	}
 
 }

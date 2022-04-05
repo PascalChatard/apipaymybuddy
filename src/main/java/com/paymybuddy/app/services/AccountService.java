@@ -78,8 +78,12 @@ public class AccountService extends GenericService<Account> {
 	 * @return A Timestamp object
 	 */
 	private Timestamp getDateTimeTransfer() {
-		log.trace("Exécute methode getDateTimeTransfer");
-		return new Timestamp(System.currentTimeMillis());
+		log.trace("Debut methode getDateTimeTransfer, sans arg.");
+
+		Timestamp time = new Timestamp(System.currentTimeMillis());
+
+		log.debug("Fin methode getDateTimeTransfer");
+		return time;
 	}
 
 	/**
@@ -91,8 +95,12 @@ public class AccountService extends GenericService<Account> {
 	 */
 	private double roundToTowSignificantDigits(double value) {
 
-		log.trace("Exécute methode roundToTowSignificantDigits");
-		return (Math.round(value * 100.0) / 100.0);
+		log.debug("Debut methode roundToTowSignificantDigits, arg: value ({})", value);
+
+		double roundedValue = (Math.round(value * 100.0) / 100.0);
+
+		log.debug("Fin methode roundToTowSignificantDigits");
+		return roundedValue;
 	}
 
 }

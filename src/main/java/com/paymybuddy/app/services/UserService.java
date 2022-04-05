@@ -28,8 +28,12 @@ public class UserService extends GenericService<User> {
 	 * @return A Iterable list of users found
 	 */
 	public Iterable<User> findByLastname(String lastname) {
-		log.debug("Debut methode findByLastname, lastname {}", lastname);
-		return userRepository.findByLastName(lastname);
+		log.debug("Debut methode findByLastname, arg: lastname ({})", lastname);
+
+		Iterable<User> iterableUser = userRepository.findByLastName(lastname);
+
+		log.debug("Fin methode findByLastname");
+		return iterableUser;
 	}
 
 	/**
@@ -39,8 +43,12 @@ public class UserService extends GenericService<User> {
 	 * @return true if user with e-mail found, false in other case
 	 */
 	public boolean existsByEmail(String mail) {
-		log.debug("Debut methode existsByEmail, mail {}", mail);
-		return (userRepository.getNumberUserByEmail(mail) > 0) ? true : false;
+		log.debug("Debut methode existsByEmail, arg: mail ({})", mail);
+
+		boolean status = (userRepository.getNumberUserByEmail(mail) > 0) ? true : false;
+
+		log.debug("Fin methode existsByEmail");
+		return status;
 	}
 
 	/**
@@ -51,7 +59,7 @@ public class UserService extends GenericService<User> {
 	 */
 	public boolean createUser(User user) {
 
-		log.debug("Debut methode createUser, User {}", user);
+		log.debug("Debut methode createUser, arg: User ({})", user);
 		log.info("Création d'un nouveau User et du Acount associé ({})", user);
 
 		// all attributes must be filled in
@@ -83,7 +91,7 @@ public class UserService extends GenericService<User> {
 		user.setAccountUser(account);
 
 		boolean statusOperation = save(user).equals(user);
-		log.info("Opération création User: {}", statusOperation ? "Succes" : "Echec");
+		log.info("Opération création User: ({})", statusOperation ? "Succes" : "Echec");
 		log.debug("Fin methode createUser");
 		return statusOperation;
 
@@ -98,11 +106,15 @@ public class UserService extends GenericService<User> {
 	 */
 	private boolean atLeastOneAttributeIsEmpty(User user) {
 
+		log.debug("Debut methode atLeastOneAttributeIsEmpty, arg: User ({})", user);
 		log.trace("Exécute methode atLeastOneAttributeIsEmpty");
 
-		return (user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getAddress().isEmpty()
+		boolean status = (user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getAddress().isEmpty()
 				|| user.getCity().isEmpty() || user.getPhone().isEmpty() || user.getMail().isEmpty()
 				|| user.getPassword().isEmpty());
+
+		log.debug("Fin methode atLeastOneAttributeIsEmpty");
+		return status;
 	}
 
 }

@@ -270,16 +270,18 @@ class UserServiceIT {
 		// account informations
 		assertThat(users.iterator().next().getAccountUser()).isNotNull();
 		assertThat(users.iterator().next().getAccountUser().getOpenDate()).isEqualTo(Date.valueOf(date.toString()));
+		// when creating the account/user the balance is zero
 		assertThat(users.iterator().next().getAccountUser().getSolde()).isEqualTo(0);
 
 		// connections informations
 		assertThat(users.iterator().next().getAccountUser().getConnections()).isNotNull();
+		// when creating the account/user there are no connections
 		assertThat(user.getAccountUser().getConnections()).hasSize(0);
 
-		// transfer information
+		// transfer informations
 		assertThat(user.getAccountUser().getTransfers()).isNotNull();
+		// when creating the account/user there are no transfers
 		assertThat(user.getAccountUser().getTransfers().size()).isEqualTo(0);
-
 	}
 
 }

@@ -22,6 +22,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 @Data
@@ -51,16 +53,15 @@ public class Account {
 	/**
 	 * Owner of the account.
 	 */
-//	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-//	@OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
-	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	@JsonManagedReference // avoid "Could not write JSON: Infinite recursion (StackOverflowError); nested
+							// exception is com.fasterxml.jackson.databind.JsonMappingException"
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "user_id")
 	User accountOwner;
 
 	/**
 	 * List of associate user account.
 	 */
-//	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_account", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	@Fetch(value = FetchMode.SUBSELECT)
@@ -70,8 +71,6 @@ public class Account {
 	 * List of transfer operations.
 	 */
 	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
-//	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true, fetch = FetchType.EAGER)
-//	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "debited_account_id")
 	List<Transfer> transfers = new ArrayList<>();
 

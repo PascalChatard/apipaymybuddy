@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Data;
 
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 @Data
 @Entity
 @Table(name = "user")
@@ -66,8 +67,8 @@ public class User {
 	/**
 	 * Account of user.
 	 */
-	@JsonBackReference // avoid "Could not write JSON: Infinite recursion (StackOverflowError); nested
-						// exception is com.fasterxml.jackson.databind.JsonMappingException"
+	@JsonBackReference // avoid "Could not write JSON: Infinite recursion (StackOverflowError)->
+						// exception JsonMappingException"
 	@OneToOne(mappedBy = "accountOwner", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
 	private Account accountUser;
 

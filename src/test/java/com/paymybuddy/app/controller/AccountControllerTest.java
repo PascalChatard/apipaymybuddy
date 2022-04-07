@@ -20,11 +20,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.paymybuddy.app.models.Account;
 import com.paymybuddy.app.services.AccountService;
+import com.paymybuddy.app.services.RateService;
+import com.paymybuddy.app.services.UserService;
 
-//@Sql("data.sql")
-//@WebMvcTest(controllers = AccountController.class)
+
 @WebMvcTest(AccountController.class)
-//@DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AccountControllerTest {
 
@@ -33,6 +33,10 @@ public class AccountControllerTest {
 
 	@MockBean
 	private AccountService accountService;
+	@MockBean
+	private UserService userService; // for makeTransfer in controller
+	@MockBean
+	private RateService rateService; // for makeTransfer in controller
 
 
 	@Test
@@ -73,6 +77,28 @@ public class AccountControllerTest {
 
 		// THEN
 		mockMvc.perform(get("/account/{id}", 2)).andExpect(status().isOk());
+
+	}
+
+	@Test
+	@Order(4)
+	public void testMakeTransfer() throws Exception {
+
+		// GIVEN
+		Date date = Date.valueOf("2022-01-23");
+		Account account = new Account();
+		account.setAccountId(2);
+		account.setOpenDate(date);
+		account.setSolde(150.85);
+
+		// WHEN
+		doReturn(account).when(accountService).makeTransfer(ArgumentMatchers.any(), ArgumentMatchers.any(),
+				ArgumentMatchers.anyString(), ArgumentMatchers.anyDouble(), ArgumentMatchers.any());
+
+		// THEN
+		mockMvc.perform(get("/account/{id}", 2)).andExpect(status().isOk());
+//		mockMvc.perform(get("/account/{id}", 2)).andExpect(status().isOk()).andExpect(jsonPath("$.accountId").value(2))
+//				.andExpect(jsonPath("$.openDate").value("2021-11-22")).andExpect(jsonPath("$.solde").value(150.85));
 
 	}
 

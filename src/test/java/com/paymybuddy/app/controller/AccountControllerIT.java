@@ -2,6 +2,7 @@ package com.paymybuddy.app.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -12,8 +13,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paymybuddy.app.models.TransferInfos;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -71,6 +76,30 @@ class AccountControllerIT {
 				.andExpect(jsonPath("$.transfers.[1].rate.value").value(0.5))
 				.andExpect(jsonPath("$.transfers.[1].rate.description").value("Taux rémunération standard"));
 
+	}
+
+	@Test
+	@Order(3)
+	public void testMakeTransfer() throws Exception {
+
+		// GIVEN
+		// beneficiary user id and transfer amount
+		TransferInfos transferInfos = TransferInfos.builder().beneficiaryUserId(1)
+				.transferDescription("Libellé du transfert").transferAmout(13.55).build();
+
+		// THEN
+		mockMvc.perform(put("/account/{id}/transfer", 2).content(asJsonString(transferInfos))
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+
+	}
+
+	private static String asJsonString(final Object obj) {
+		try {
+			return new ObjectMapper().writeValueAsString(obj);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

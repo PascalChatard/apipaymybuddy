@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paymybuddy.app.models.Account;
+import com.paymybuddy.app.models.TransferInfos;
 import com.paymybuddy.app.services.AccountService;
 import com.paymybuddy.app.services.RateService;
 import com.paymybuddy.app.services.UserService;
@@ -55,26 +56,30 @@ public class AccountController {
 	}
 
 	/**
-	 * Gere la requete de mise a jour de l'objet Firestation positionne a l'index id
-	 * dans le DataSrc dataSrc, appelle la methode de la couche service.
+	 * makeTransfer - Manage transfer request of money
 	 * 
-	 * @param id, index de l'objet Firestation a modifier
-	 * @param request, la requete a traiter
-	 * @param firestation, l'objet Firestation a modifier dans la base de donnees
-	 * @return une reference a l'objet modifier dans dataSrc
+	 * @param idAccount, the account id to be debited
+	 * @param transferInfos, all the transfer informations to operate transfer
+	 * @return Void ResponseEntity
 	 * 
 	 */
 	@PutMapping("/account/{idAccount}/transfer")
 	public ResponseEntity<Void> makeTransfer(HttpServletRequest request, @PathVariable int idAccount,
-			@RequestBody int userId, double amount) {
+			@RequestBody TransferInfos transferInfos) {
 
 		log.info("Requete HTTP {}, Uri: {}", request.getMethod(), request.getRequestURI());
 
+
 		Account accountUpdated = accountService.makeTransfer(accountService.findById(idAccount).get(),
-				userService.findById(userId).get(), "Libellé du transfert", amount, rateService.findById(1).get());
+				userService.findById(transferInfos.getBeneficiaryUserId()).get(),
+				transferInfos.getTransferDescription(),
+				transferInfos.getTransferAmout(), rateService.findById(1).get());
 
 
 		ResponseEntity<Void> responseEntity = new ResponseEntity<Void>(HttpStatus.OK);
+
+		log.info("Reponse ({}) requete HTTP {}, Uri: {}", responseEntity.getStatusCode(), request.getMethod(),
+				request.getRequestURI());
 
 		return responseEntity;
 	}

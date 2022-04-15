@@ -2,6 +2,8 @@ package com.paymybuddy.app.services;
 
 import java.sql.Timestamp;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.paymybuddy.app.models.Account;
@@ -13,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@Transactional
 public class AccountService extends GenericService<Account> {
 
 
@@ -29,11 +32,13 @@ public class AccountService extends GenericService<Account> {
 	public Account makeTransfer(Account debitedAccount, User beneficiaryUser, String descriptionTransfer,
 			double amount, Rate rate) {
 
-		log.debug("Debut methode makeTransfer, arg: Account {}, User {}, description {}, montant {}, taux {}",
+		log.debug("Debut methode makeTransfer, arg: Account ({}), User ({}), description ({}), montant ({}), taux ({})",
 				debitedAccount, beneficiaryUser, descriptionTransfer, amount, rate);
 		log.info("Réalisation d'un transfert ({}), montant ({})", descriptionTransfer, amount);
 
-		if (amount < 0.0) {
+		if (amount <= 0.0) {
+			// the transfer amount cannot be negative
+			log.error("The transfer amount cannot be negative ({}).", amount);
 			return null;
 		} else {
 			if (debitedAccount.getSolde() >= amount) {
@@ -58,6 +63,9 @@ public class AccountService extends GenericService<Account> {
 				log.debug("Nouveau solde compte créditer ({})", beneficiaryUser.getAccountUser().getSolde());
 
 			} else {
+				// the account balance is insufficient
+				log.error("The account balance is insufficient, balance ({})/ amount ({}).", debitedAccount.getSolde(),
+						amount);
 				return null;
 			}
 		}
@@ -78,7 +86,7 @@ public class AccountService extends GenericService<Account> {
 	 * @return A Timestamp object
 	 */
 	private Timestamp getDateTimeTransfer() {
-		log.trace("Debut methode getDateTimeTransfer, sans arg.");
+		log.debug("Debut methode getDateTimeTransfer, sans arg.");
 
 		Timestamp time = new Timestamp(System.currentTimeMillis());
 

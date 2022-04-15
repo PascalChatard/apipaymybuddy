@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paymybuddy.app.models.Account;
 import com.paymybuddy.app.models.TransferInfos;
+import com.paymybuddy.app.models.User;
 import com.paymybuddy.app.services.AccountService;
 import com.paymybuddy.app.services.RateService;
 import com.paymybuddy.app.services.UserService;
@@ -40,19 +41,28 @@ public class AccountController {
 	 * @return An Account object full filled
 	 */
 	@GetMapping("/account/{id}")
-	public Account getAccount(@PathVariable("id") final Integer id) {
-		log.debug("Debut methode getAccount, arg: Account Id ({})", id);
+	public ResponseEntity<Account> getAccount(HttpServletRequest request, @PathVariable("id") final Integer idAccount) {
 
-		Optional<Account> account = accountService.findById(id);
+		log.info("Requete HTTP ({}), Uri: ({})", request.getMethod(), request.getRequestURI());
+
+		ResponseEntity<Account> responseEntity = null;
+
+		Optional<Account> account = accountService.findById(idAccount);
 		if (account.isPresent()) {
-			log.debug("Fin methode getAccount");
 
-			return account.get();
+			log.info("Account with ID ({}) exist.", idAccount);
+			responseEntity = ResponseEntity.ok(account.get());
+
 		} else {
-			log.debug("Fin methode getAccount");
 
-			return null;
+			log.error("Account with ID ({}) does not exist.", idAccount);
+			responseEntity = new ResponseEntity<Account>(HttpStatus.BAD_REQUEST);
 		}
+
+		log.info("Reponse ({}) requete HTTP ({}), Uri: ({})", responseEntity.getStatusCode(), request.getMethod(),
+				request.getRequestURI());
+
+		return responseEntity;
 	}
 
 	/**
@@ -67,18 +77,77 @@ public class AccountController {
 	public ResponseEntity<Void> makeTransfer(HttpServletRequest request, @PathVariable int idAccount,
 			@RequestBody TransferInfos transferInfos) {
 
-		log.info("Requete HTTP {}, Uri: {}", request.getMethod(), request.getRequestURI());
+		log.info("Requete HTTP ({}), Uri: ({})", request.getMethod(), request.getRequestURI());
 
+		log.debug("RequestBody:({})", transferInfos.toString());
 
-		Account accountUpdated = accountService.makeTransfer(accountService.findById(idAccount).get(),
-				userService.findById(transferInfos.getBeneficiaryUserId()).get(),
-				transferInfos.getTransferDescription(),
-				transferInfos.getTransferAmout(), rateService.findById(1).get());
+		ResponseEntity<Void> responseEntity = null;
+		boolean statusRequest = true;
 
+		// check account exist
+		Optional<Account> accountOptional = accountService.findById(idAccount);
+		if (accountOptional.isEmpty()) {
 
-		ResponseEntity<Void> responseEntity = new ResponseEntity<Void>(HttpStatus.OK);
+			statusRequest = false;
+			log.error("Account with ID ({}) does not exist.", idAccount);
+			responseEntity = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 
-		log.info("Reponse ({}) requete HTTP {}, Uri: {}", responseEntity.getStatusCode(), request.getMethod(),
+		}
+
+		// check user exist
+		Optional<User> userOptional = userService.findById(transferInfos.getBeneficiaryUserId());
+		if (statusRequest && userOptional.isEmpty()) {
+
+			statusRequest = false;
+			log.error("User with ID ({}) does not exist.", transferInfos.getBeneficiaryUserId());
+			responseEntity = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		}
+
+		// check there is transfer description in request
+		if (statusRequest && (transferInfos.getTransferDescription() == null)) {
+
+			statusRequest = false;
+			log.error("Transfer description is marked non-null but is null.");
+			responseEntity = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		}
+
+		// check there is transfer amount in request
+		if (statusRequest && (transferInfos.getTransferAmout() == 0)) {
+
+			statusRequest = false;
+			log.error("No transfer amount value.");
+			responseEntity = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		}
+
+		// check that all the required conditions are ok
+		if (statusRequest) {
+
+			User user = userOptional.get();
+			Account account = accountOptional.get();
+
+			log.debug("Make a transfer from account: ({}) ", account);
+			log.debug("to user: ({}) ", user);
+			log.debug("with description ({}) and amount ({})", transferInfos.getTransferDescription(),
+					transferInfos.getTransferAmout());
+			log.info("makeTransfer service call");
+
+			Account accountUpdated = accountService.makeTransfer(account, user,
+					transferInfos.getTransferDescription(), transferInfos.getTransferAmout(),
+					rateService.findById(1).get());
+			if (accountUpdated == null) {
+
+				responseEntity = new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+				log.error("The transfer ({}) of amount ({}) could not be realized",
+						transferInfos.getTransferDescription(), transferInfos.getTransferAmout());
+			} else {
+				responseEntity = new ResponseEntity<Void>(HttpStatus.OK);
+				log.info("The transfer ({}) of amount ({}) be realized", transferInfos.getTransferDescription(),
+						transferInfos.getTransferAmout());
+			}
+
+		}
+
+		log.info("Reponse ({}) requete HTTP ({}), Uri: ({})", responseEntity.getStatusCode(), request.getMethod(),
 				request.getRequestURI());
 
 		return responseEntity;

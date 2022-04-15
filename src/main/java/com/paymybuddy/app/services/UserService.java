@@ -2,6 +2,8 @@ package com.paymybuddy.app.services;
 
 import java.sql.Date;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@Transactional
 public class UserService extends GenericService<User> {
 
 	/**

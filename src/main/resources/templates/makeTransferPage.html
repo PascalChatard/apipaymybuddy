@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <title>Bank</title>
+   </head>
+   <body>      
+      <!-- Include _menu.html -->
+
+      <h2>Send Money</h2>
+
+      <form th:action="@{/account/transfer}" th:object="${transferInfos}" method="POST">
+         <table>
+           <tr>
+              <td>To Bank Account Id</td>
+              <td><input type="number" th:field="*{beneficiaryUserId}"/></td>
+           </tr>
+           <tr>
+              <td>To Bank Account Id</td>
+              <td><input type="text" th:field="*{transferDescription}"/></td>
+           </tr>
+            <tr>
+              <td>Amount</td>
+              <td><input type="text" th:field="*{transferAmout}" /></td>
+           </tr>          
+           <tr>
+              <td>&nbsp;</td>
+              <td><input type="submit" value="Send"/></td>
+           </tr>      
+         </table>      
+      </form>
+   </body>
+</html>

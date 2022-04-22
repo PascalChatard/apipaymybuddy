@@ -105,12 +105,15 @@ public class AccountControllerTest {
 		user.setFirstName("durand");
 		user.setLastName("jean");
 
+		Rate rate = new Rate();
+		rate.setRateId(1);
+		rate.setDescription("Tax de rémunération");
+		rate.setValue(0.05);
+
 		// WHEN
 		doReturn(Optional.of(account)).when(accountService).findById(ArgumentMatchers.anyInt());
 		doReturn(Optional.of(user)).when(userService).findById(ArgumentMatchers.anyInt());
-
-//		doReturn(account).when(accountService).makeTransfer(ArgumentMatchers.any(), ArgumentMatchers.any(),
-//				ArgumentMatchers.anyString(), ArgumentMatchers.anyDouble(), ArgumentMatchers.any());
+		doReturn(Optional.of(rate)).when(rateService).findById(ArgumentMatchers.anyInt());
 
 		doReturn(account).when(accountService).makeTransfer(ArgumentMatchers.any(Account.class),
 				ArgumentMatchers.any(User.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyDouble(),

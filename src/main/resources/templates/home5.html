@@ -44,19 +44,22 @@
 <!--             Nouveau Transfert       -->
 <!-- *********************************** -->
 
-
 	<div class="container special">
 		<h2 class="h2">Send Money<a th:href="@{/addConnection}"><button class="btn btn-info">Add Connection</button></a></h2>
-					
-		<form  th:action="@{/account/transfer}" th:object="${transfer}" method="POST"  > 
-		
-     		<div class="form-group">
-				<label for="firstNameInput">Prénom</label> 
-				<input
-						type="text" th:field="*{description}" /> 
-			</div>
-        
-		</form> 
+				
+		<form  method="POST" th:action="@{/account/{id}(id=${account.accountId})}" th:object="${transferInfos}"> 
+			<div class="form-group blu-margin"> 
+			
+    			<select class="form-control" name="beneficiaryUserId" >
+    				<option value="0">select A Connection</option>
+    				<option th:each="user : ${account.connections}" th:value="${user.userId}" th:text="${user.firstName}" ></option>
+     			</select>  
+ 				<input	type="text" name="transferDescription" placeholder="Give a description" class="form-control" id="Description"> 
+     			<input type="number" step="0.01" value="0.0" name="transferAmout" >
+        		<button type="submit" class="btn btn-info">Pay</button> 
+     		</div>
+     			
+		</form>
 	</div>
 
 

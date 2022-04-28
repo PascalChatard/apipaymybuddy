@@ -11,16 +11,16 @@
       <form th:action="@{/account/transfer}" th:object="${transferInfos}" method="POST">
          <table>
            <tr>
-              <td>To Bank Account Id</td>
-              <td><input type="number" th:field="*{beneficiaryUserId}"/></td>
+              <td>Beneficiary user Id</td>
+              <td><input type="number" name="beneficiaryUserId"/></td>
            </tr>
            <tr>
-              <td>To Bank Account Id</td>
-              <td><input type="text" th:field="*{transferDescription}"/></td>
+              <td>Description</td>
+              <td><input type="text" name="transferDescription"/></td>
            </tr>
             <tr>
               <td>Amount</td>
-              <td><input type="text" th:field="*{transferAmout}" /></td>
+              <td><input type="number" step="0.01" name="transferAmout"/></td>
            </tr>          
            <tr>
               <td>&nbsp;</td>

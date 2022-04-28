@@ -71,10 +71,12 @@ public class AccountService extends GenericService<Account> {
 		}
 
 		Account modifiedDebitedAccount = save(debitedAccount);
-		log.info("Mise à jour compte débité suite au transfert ({}), montant ({})", descriptionTransfer, amount);
+		log.info("Mise à jour compte débité suite au transfert ({}), montant ({})",
+				modifiedDebitedAccount.getAccountId(), descriptionTransfer, amount);
 
 		Account modifiedCreditedAccount = save(beneficiaryUser.getAccountUser());
-		log.info("Mise à jour compte crédité suite au transfert ({}), montant ({})", descriptionTransfer, amount);
+		log.info("Mise à jour compte crédité ({}) suite au transfert ({}), montant ({})",
+				modifiedCreditedAccount.getAccountId(), descriptionTransfer, amount);
 
 		log.debug("Fin methode makeTransfer");
 		return modifiedDebitedAccount;

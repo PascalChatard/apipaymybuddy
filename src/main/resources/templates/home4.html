@@ -48,31 +48,19 @@
 		<h2 class="h2">Send Money<a th:href="@{/addConnection}"><button class="btn btn-info">Add Connection</button></a></h2>
 				
 		
-<!--		<form  method="PUT" th:action="@{/account/{account.accountId}/transfer}" th:object="${transferInfos}"> -->
-		<form  method="PUT" th:action="@{/account/transfer}" th:object="${transferInfos}"> 
+<!--		<form  method="POST" th:action="@{/account/{account.accountId}/transfer}" th:object="${transferInfos}"> -->
+		<form  method="POST" th:action="@{/account/transfer}" th:object="${transferInfos}"> 
 
-<!--			<div class="form-group blu-margin"> -->
-<!--    			<select class="form-control" th:field="${account}" >
+			<div class="form-group blu-margin"> 
+    			<select class="form-control" th:field="${account}" >
     				<option value="0">select A Connection</option>
     				<option th:each="user : ${account.connections}" th:value="${user.firstName}" th:text="${user.firstName}"></option>
-     			</select>  -->
-     			
-     		<div class="form-group">
-				<label for="firstNameInput">Prénom</label> 
-				<input
-						type="text" th:field="*{transferDescription}" class="form-control" id="firstNameInput"
-						aria-describedby="firstNameHelp" placeholder="Saisir le prénom"> <small
-						id="firstNameHelp" class="form-text text-muted">Merci d'écrire le prénom de l'employée.</small>
-			</div>
-     
-     
-     			
-     			
-<!--     			<input type="text" th:field="*{transferDescription}" >
-     			<input type="text" th:field="*{transferAmout}" > -->
-     			
+     			</select>  
+ 				<input	type="text" name="transferDescription" placeholder="Give a description" class="form-control" id="Description"> 
+     			<input type="number" step="0.01" value="0.0" name="transferAmout" >
         		<button type="submit" class="btn btn-info">Pay</button>
-<!--			</div> -->
+     		</div>
+     			
 		</form>
 	</div>
 

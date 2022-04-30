@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.paymybuddy.app.models.User;
 
+@ActiveProfiles("dev")
 @Sql("data.sql")
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

@@ -21,10 +21,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.paymybuddy.app.models.Transfer;
 import com.paymybuddy.app.repositories.TransferRepository;
 
+@ActiveProfiles("dev")
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TransferServiceTest {

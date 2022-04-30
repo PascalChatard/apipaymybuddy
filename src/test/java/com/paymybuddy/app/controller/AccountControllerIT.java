@@ -1,10 +1,13 @@
 package com.paymybuddy.app.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -13,13 +16,14 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paymybuddy.app.models.TransferInfos;
 
+@ActiveProfiles("dev")
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql("data.sql")
@@ -38,68 +42,28 @@ class AccountControllerIT {
 	@Order(2)
 	@Test
 	public void testGetAccount() throws Exception {
-		mockMvc.perform(get("/account/{id}", 2)).andExpect(status().isOk()).andExpect(jsonPath("$.accountId").value(2))
-				.andExpect(jsonPath("$.openDate").value("2021-11-22")).andExpect(jsonPath("$.solde").value(25.50))
-				// verify account owner info
-				.andExpect(jsonPath("$.accountOwner.userId").value(2))
-				.andExpect(jsonPath("$.accountOwner.firstName").value("dupont"))
-				.andExpect(jsonPath("$.accountOwner.lastName").value("louis"))
-				.andExpect(jsonPath("$.accountOwner.address").value("15 rue du rouget"))
-				.andExpect(jsonPath("$.accountOwner.city").value("aix-en-provence"))
-				.andExpect(jsonPath("$.accountOwner.phone").value("0745235889"))
-				.andExpect(jsonPath("$.accountOwner.mail").value("dupontlouis@hotmail.fr"))
-				.andExpect(jsonPath("$.accountOwner.password").value("louis2022"))
-				// verify account connections info
-				.andExpect(jsonPath("$.connections.[0].userId").value(3))
-				.andExpect(jsonPath("$.connections.[0].lastName").value("alain"))
-				.andExpect(jsonPath("$.connections.[0].firstName").value("Lejeune"))
-				.andExpect(jsonPath("$.connections.[0].address").value("32 avenue léon bloum"))
-				.andExpect(jsonPath("$.connections.[0].city").value("pertuis"))
-				.andExpect(jsonPath("$.connections.[0].phone").value("0490255633"))
-				.andExpect(jsonPath("$.connections.[0].mail").value("alejeune@outlook.com"))
-				.andExpect(jsonPath("$.connections.[0].password").value("alain2022"))
-				// verify account transfers info
-				.andExpect(jsonPath("$.transfers.[0].transferId").value(1))
-				.andExpect(jsonPath("$.transfers.[0].date").value("2022-01-01T23:00:00.000+00:00"))
-				.andExpect(jsonPath("$.transfers.[0].description").value("Remboursement ciné"))
-				.andExpect(jsonPath("$.transfers.[0].amount").value(15.05))
-				.andExpect(jsonPath("$.transfers.[0].cost").value(0.08))
-				.andExpect(jsonPath("$.transfers.[0].rate.rateId").value(1))
-				.andExpect(jsonPath("$.transfers.[0].rate.value").value(0.5))
-				.andExpect(jsonPath("$.transfers.[0].rate.description").value("Taux rémunération standard"))
-				.andExpect(jsonPath("$.transfers.[1].transferId").value(2))
-				.andExpect(jsonPath("$.transfers.[1].date").value("2022-01-01T23:00:00.000+00:00"))
-				.andExpect(jsonPath("$.transfers.[1].description").value("Participation cadeau"))
-				.andExpect(jsonPath("$.transfers.[1].amount").value(5.50))
-				.andExpect(jsonPath("$.transfers.[1].cost").value(0.03))
-				.andExpect(jsonPath("$.transfers.[1].rate.rateId").value(1))
-				.andExpect(jsonPath("$.transfers.[1].rate.value").value(0.5))
-				.andExpect(jsonPath("$.transfers.[1].rate.description").value("Taux rémunération standard"));
 
+
+		mockMvc.perform(get("/account/{id}", 2)).andExpect(status().isOk()).andExpect(view().name("accountPage"))
+				.andExpect(model().attributeExists("account"))
+				.andExpect(model().attribute("account", hasProperty("accountId", is(2))))
+				.andExpect(model().attribute("account", hasProperty("solde", is(25.50))));
+		// .andExpect(model().attribute("account", hasProperty("title", is("Foo"))));
 	}
 
 	@Test
 	@Order(3)
 	public void testMakeTransfer() throws Exception {
 
-		// GIVEN
-		// beneficiary user id and transfer amount
-		TransferInfos transferInfos = TransferInfos.builder().beneficiaryUserId(1)
-				.transferDescription("Libellé du transfert").transferAmout(13.55).build();
+		// WHEN
+		ResultActions perform = mockMvc.perform(post("/account/{id}", 2).param("beneficiaryUserId", "1")
+				.param("transferDescription", "Libellé du transfert").param("transferAmout", "13.55")
+				.flashAttr("transferInfos", new TransferInfos()));
+
 
 		// THEN
-		mockMvc.perform(put("/account/{id}/transfer", 2).content(asJsonString(transferInfos))
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
+		perform.andExpect(status().isFound());
 
-	}
-
-	private static String asJsonString(final Object obj) {
-		try {
-			return new ObjectMapper().writeValueAsString(obj);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 }

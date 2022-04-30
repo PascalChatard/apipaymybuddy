@@ -22,11 +22,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.paymybuddy.app.models.Account;
 import com.paymybuddy.app.repositories.AccountRepository;
 
 
+@ActiveProfiles("dev")
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AccountServiceTest {

@@ -11,10 +11,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
 public class User {

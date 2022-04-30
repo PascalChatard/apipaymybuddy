@@ -24,10 +24,11 @@ import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "accountId")
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "account")
 public class Account {

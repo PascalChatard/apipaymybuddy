@@ -200,6 +200,12 @@ public class AccountController {
 
 		log.debug("Account with ID ({}) exist.", accountId);
 
+//		// recherche la/les Person(s) dont l'adresse est: address
+//		List<User> users = (userService.findAll()).stream()
+//				.filter(person -> !person.getAddress().isEmpty() && person.getAddress().contentEquals(address))
+//				.collect(Collectors.toList());
+
+
 		model.addAttribute("users", userService.findAll());
 
 		log.info("Reponse ({}) requete HTTP ({}), Uri: ({})", response.getStatus(), request.getMethod(),
@@ -226,7 +232,6 @@ public class AccountController {
 
 		log.info("Requete HTTP ({}), Uri: ({})", request.getMethod(), request.getRequestURI());
 
-//		ResponseEntity<Void> responseEntity = null;
 
 		Optional<Account> optAccount = accountService.findById(accountId);
 		if (optAccount.isEmpty()) {
@@ -260,7 +265,6 @@ public class AccountController {
 
 		}
 
-//		responseEntity = new ResponseEntity<Void>(HttpStatus.OK);
 		log.debug("The add new connection with userId ({}) to account ({})  be realized", userId, accountId);
 
 

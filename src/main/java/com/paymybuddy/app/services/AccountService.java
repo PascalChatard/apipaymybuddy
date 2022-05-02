@@ -1,11 +1,13 @@
 package com.paymybuddy.app.services;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.paymybuddy.app.exceptions.InvalidTransferAmountException;
 import com.paymybuddy.app.models.Account;
 import com.paymybuddy.app.models.Rate;
 import com.paymybuddy.app.models.Transfer;
@@ -18,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 public class AccountService extends GenericService<Account> {
 
-
 	/**
 	 * makeTransfer - Make a money transfer from account to beneficiary user
 	 * 
@@ -29,46 +30,47 @@ public class AccountService extends GenericService<Account> {
 	 * @param rate                Transfer rate object of pay
 	 * @return The Account object full filled and updated
 	 */
-	public Account makeTransfer(Account debitedAccount, User beneficiaryUser, String descriptionTransfer,
-			double amount, Rate rate) {
+	public Account makeTransfer(Account debitedAccount, User beneficiaryUser, String descriptionTransfer, double amount,
+			Rate rate) throws IOException {
 
 		log.debug("Debut methode makeTransfer, arg: Account ({}), User ({}), description ({}), montant ({}), taux ({})",
 				debitedAccount, beneficiaryUser, descriptionTransfer, amount, rate);
 		log.info("Réalisation d'un transfert ({}), montant ({})", descriptionTransfer, amount);
 
-		if (amount <= 0.0) {
-			// the transfer amount cannot be negative
-			log.error("The transfer amount cannot be negative ({}).", amount);
-			return null;
-		} else {
-			if (debitedAccount.getSolde() >= amount) {
+		if (debitedAccount.getSolde() < amount) {
+			// the account balance is insufficient
+			log.error("The account balance is insufficient, balance ({})/ amount ({}).", debitedAccount.getSolde(),
+					amount);
 
-				Transfer transfer = new Transfer();
-				transfer.setDate(getDateTimeTransfer());
-				transfer.setDescription(descriptionTransfer);
-				transfer.setAmount(amount);
-				transfer.setDebitedAccount(debitedAccount);
-				transfer.setCreditedAccount(beneficiaryUser.getAccountUser());
-				transfer.setRate(rate);
-				transfer.setCost(roundToTowSignificantDigits(amount * rate.getValue() / 100));
-
-				debitedAccount.getTransfers().add(transfer);
-				// Debit the amount of the user's account
-				debitedAccount.setSolde(roundToTowSignificantDigits(debitedAccount.getSolde() - amount));
-				log.debug("Nouveau solde compte débité ({})", debitedAccount.getSolde());
-
-				// Credit the Beneficiary Account
-				beneficiaryUser.getAccountUser()
-						.setSolde(roundToTowSignificantDigits(beneficiaryUser.getAccountUser().getSolde() + amount));
-				log.debug("Nouveau solde compte créditer ({})", beneficiaryUser.getAccountUser().getSolde());
-
-			} else {
-				// the account balance is insufficient
-				log.error("The account balance is insufficient, balance ({})/ amount ({}).", debitedAccount.getSolde(),
-						amount);
-				return null;
-			}
+			throw new InvalidTransferAmountException(debitedAccount.getSolde(), amount);
 		}
+
+		// check there is a valid transfer amount
+		if (amount <= 0) {
+
+			log.error("Invaid value, the amount cannot be negative or equal to zero ({}).", amount);
+			throw new InvalidTransferAmountException();
+		}
+
+		Transfer transfer = new Transfer();
+		transfer.setDate(getDateTimeTransfer());
+		transfer.setDescription(descriptionTransfer);
+		transfer.setAmount(amount);
+		transfer.setDebitedAccount(debitedAccount);
+		transfer.setCreditedAccount(beneficiaryUser.getAccountUser());
+		transfer.setRate(rate);
+		transfer.setCost(roundToTowSignificantDigits(amount * rate.getValue() / 100));
+
+		debitedAccount.getTransfers().add(transfer);
+		// Debit the amount of the user's account
+		debitedAccount.setSolde(roundToTowSignificantDigits(debitedAccount.getSolde() - amount));
+		log.debug("Nouveau solde compte débité ({})", debitedAccount.getSolde());
+
+		// Credit the Beneficiary Account
+		beneficiaryUser.getAccountUser()
+				.setSolde(roundToTowSignificantDigits(beneficiaryUser.getAccountUser().getSolde() + amount));
+		log.debug("Nouveau solde compte créditer ({})", beneficiaryUser.getAccountUser().getSolde());
+
 
 		Account modifiedDebitedAccount = save(debitedAccount);
 		log.info("Mise à jour compte débité suite au transfert ({}), montant ({})",

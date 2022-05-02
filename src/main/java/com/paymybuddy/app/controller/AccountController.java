@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paymybuddy.app.exceptions.AccountIdException;
-import com.paymybuddy.app.exceptions.TransferAmountNotFoundException;
+import com.paymybuddy.app.exceptions.InvalidTransferAmountException;
 import com.paymybuddy.app.exceptions.TransferDescriptionNotFoundException;
 import com.paymybuddy.app.exceptions.UnrealizedAddNewConnectionException;
 import com.paymybuddy.app.exceptions.UnrealizedTransferException;
@@ -129,10 +129,11 @@ public class AccountController {
 		}
 
 		// check there is transfer amount in request
-		if (transferInfos.getTransferAmout() == 0) {
+		if (transferInfos.getTransferAmout() <= 0) {
 
-			log.error("No transfer amount value.");
-			throw new TransferAmountNotFoundException();
+			log.error("Invaid value, the amount cannot be negative or equal to zero ({}).",
+					transferInfos.getTransferAmout());
+			throw new InvalidTransferAmountException();
 		}
 
 		// check that all the required conditions are ok
@@ -284,7 +285,7 @@ public class AccountController {
 	 * 
 	 */
 	@ExceptionHandler({ AccountIdException.class, UserIdException.class, TransferDescriptionNotFoundException.class,
-			TransferAmountNotFoundException.class })
+			InvalidTransferAmountException.class })
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public String handleBadRequestException(Exception ex, Model model) {
 

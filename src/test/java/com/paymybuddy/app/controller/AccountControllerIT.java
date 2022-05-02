@@ -48,7 +48,6 @@ class AccountControllerIT {
 				.andExpect(model().attributeExists("account"))
 				.andExpect(model().attribute("account", hasProperty("accountId", is(2))))
 				.andExpect(model().attribute("account", hasProperty("solde", is(25.50))));
-		// .andExpect(model().attribute("account", hasProperty("title", is("Foo"))));
 	}
 
 	@Test

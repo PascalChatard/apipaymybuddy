@@ -1,6 +1,7 @@
 package com.paymybuddy.app.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -201,13 +202,12 @@ public class AccountController {
 
 		log.debug("Account with ID ({}) exist.", accountId);
 
-//		// recherche la/les Person(s) dont l'adresse est: address
-//		List<User> users = (userService.findAll()).stream()
-//				.filter(person -> !person.getAddress().isEmpty() && person.getAddress().contentEquals(address))
-//				.collect(Collectors.toList());
+		// searches for Users who are not account owner and who are not in connections
+		List<User> availableUsers = accountService.getAvailableUserForConnection(userService.findAll(),
+				optAccount.get());
+		log.debug("Are there available users for the connection? ({})", availableUsers.isEmpty() ? "no" : "yes");
 
-
-		model.addAttribute("users", userService.findAll());
+		model.addAttribute("users", availableUsers);
 
 		log.info("Reponse ({}) requete HTTP ({}), Uri: ({})", response.getStatus(), request.getMethod(),
 				request.getRequestURI());

@@ -2,6 +2,10 @@ package com.paymybuddy.app.services;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.transaction.Transactional;
 
@@ -82,6 +86,43 @@ public class AccountService extends GenericService<Account> {
 
 		log.debug("Fin methode makeTransfer");
 		return modifiedDebitedAccount;
+	}
+
+	/**
+	 * getAvailableUserForConnection - return all users who are not account owner
+	 * and who are not in connections
+	 * 
+	 * @param allUsers all user in BDD
+	 * @param account  the account on which you want to add a connection
+	 * @return The User list available for add new connection
+	 */
+	public List<User> getAvailableUserForConnection(Iterable<User> allUsers, Account account) {
+
+		List<User> connections = account.getConnections();
+		// extracts the owning user of all user
+		List<User> availableUsers = StreamSupport.stream(allUsers.spliterator(), false)
+				.filter(user -> user.getUserId() != account.getAccountOwner().getUserId()).collect(Collectors.toList());
+
+		// indicates users already in the connection
+		List<User> presentUsers = new ArrayList<User>();
+
+		// searches for Users that are in connections
+		for (User user : availableUsers) {
+			for (User connection : connections) {
+				log.debug("Verify user available / user in connection -> ({})/({})", user.getFirstName(),
+						connection.getFirstName());
+				if (connection.getMail().equals(user.getMail())) {
+
+					presentUsers.add(user);
+					log.debug("The user is present in connections ({})", user.getFirstName());
+					break;
+				}
+			}
+		}
+
+		// extracts users already in the connection
+		presentUsers.forEach(user -> availableUsers.remove(user));
+		return availableUsers;
 	}
 
 	/**

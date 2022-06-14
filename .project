@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>PayMyBuddy</name>
+	<name>apipaymybuddy</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -33,24 +33,24 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>src/test/java/com/paymybuddy/app/data.sql</name>
+			<name>src/test/java/com/apipaymybuddy/app/data.sql</name>
 			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/data.sql</location>
+			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/apipaymybuddy/scripts/data.sql</location>
 		</link>
 		<link>
-			<name>src/test/java/com/paymybuddy/app/controller/data.sql</name>
+			<name>src/test/java/com/apipaymybuddy/app/controller/data.sql</name>
 			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/data.sql</location>
+			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/apipaymybuddy/scripts/data.sql</location>
 		</link>
 		<link>
-			<name>src/test/java/com/paymybuddy/app/repositories/data.sql</name>
+			<name>src/test/java/com/apipaymybuddy/app/repositories/data.sql</name>
 			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/data.sql</location>
+			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/apipaymybuddy/scripts/data.sql</location>
 		</link>
 		<link>
-			<name>src/test/java/com/paymybuddy/app/services/data.sql</name>
+			<name>src/test/java/com/apipaymybuddy/app/services/data.sql</name>
 			<type>1</type>
-			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/PayMyBuddy/scripts/data.sql</location>
+			<location>/home/chataroundi/Documents/Mes developpements/Eclipse/Java/apipaymybuddy/scripts/data.sql</location>
 		</link>
 	</linkedResources>
 </projectDescription>

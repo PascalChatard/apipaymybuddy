@@ -8,10 +8,10 @@
 		<version>2.6.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.paymybuddy</groupId>
-	<artifactId>PayMyBuddy</artifactId>
+	<groupId>com.apipaymybuddy</groupId>
+	<artifactId>apipaymybuddy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>PayMyBuddy</name>
+	<name>apipaymybuddy</name>
 	<description>Prototype money transfer application</description>
 	<properties>
 		<java.version>11</java.version>

@@ -10,15 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.apipaymybuddy.app.exceptions.AccountIdException;
 import com.apipaymybuddy.app.exceptions.InvalidTransferAmountException;
@@ -27,6 +26,7 @@ import com.apipaymybuddy.app.exceptions.UnrealizedAddNewConnectionException;
 import com.apipaymybuddy.app.exceptions.UnrealizedTransferException;
 import com.apipaymybuddy.app.exceptions.UserIdException;
 import com.apipaymybuddy.app.models.Account;
+import com.apipaymybuddy.app.models.AccountModel;
 import com.apipaymybuddy.app.models.TransferInfos;
 import com.apipaymybuddy.app.models.User;
 import com.apipaymybuddy.app.services.AccountService;
@@ -36,7 +36,7 @@ import com.apipaymybuddy.app.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Controller
+@RestController
 public class AccountController {
 
 	@Autowired
@@ -48,30 +48,41 @@ public class AccountController {
 
 
 	/**
-	 * getAccount - Display account informations referred by this id
+	 * getAccount - Get the account entity referred by this id
 	 * 
-	 * @param idAccount the id of the account to display
+	 * @param idAccount the id of the account to search
 	 * @param request   http servlet request
-	 * @param response  http servlet response
-	 * @return the template account web page
+	 * @param response  http servlet response // * @return the template account web
+	 *                  page
+	 * @return the account's entity object
 	 * @throws IOException
 	 */
 	@GetMapping("/account/{id}")
-	public String getAccount(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("id") final int accountId, Model model)
+	public ResponseEntity<AccountModel> getAccount(HttpServletRequest request, HttpServletResponse response,
+			// public ResponseEntity<Account> getAccount(HttpServletRequest request,
+			// HttpServletResponse response,
+
+			// public Account getAccount(HttpServletRequest request, HttpServletResponse
+			// response,
+			@PathVariable("id") final int accountId)
+//			@PathVariable("id") final int accountId, Model model)
 			throws IOException {
 
 		log.info("Requete HTTP ({}), Uri: ({})", request.getMethod(), request.getRequestURI());
 
 
-		Optional<Account> optAccount = accountService.findById(accountId);
-		if (optAccount.isEmpty()) {
+		// Optional<Account> optAccount = accountService.findById(accountId);
+
+		Optional<AccountModel> optAccountModel = accountService.getById(accountId);
+		if (optAccountModel.isEmpty()) {
 
 			log.error("Account with ID ({}) does not exist.", accountId);
 			throw new AccountIdException(accountId);
 		}
 
-		model.addAttribute("account", optAccount.get());
+//		model.addAttribute("account", optAccount.get());
+
+		// Transfer Ok!
 
 		log.debug("Account with ID ({}) exist.", accountId);
 
@@ -79,7 +90,9 @@ public class AccountController {
 		log.info("Reponse ({}) requete HTTP ({}), Uri: ({})", response.getStatus(), request.getMethod(),
 				request.getRequestURI());
 
-		return "accountPage";
+//		return "accountPage";
+		// return optAccount.get();
+		return new ResponseEntity<>(optAccountModel.get(), HttpStatus.OK);
 	}
 
 
@@ -87,15 +100,19 @@ public class AccountController {
 	 * makeTransfer - Manage transfer request of money
 	 * 
 	 * @param               idAccount, the account id to be debited
-	 * @param request       http servlet request
-	 * @param response      http servlet response
-	 * @param transferInfos all transfer informations to operate transfer
-	 * @return redirect ModelAndView to /account/{idAccount}
+	 * @param request       http servlet request // * @param response http servlet
+	 *                      response
+	 * @param transferInfos all transfer informations to operate transfer //
+	 *                      * @return redirect ModelAndView to /account/{idAccount}
+	 * @return a empty HTTP response
 	 * 
 	 */
 	@PostMapping("/account/{accountId}")
-	public ModelAndView makeTransfer(HttpServletRequest request, @PathVariable int accountId,
-			@ModelAttribute("transferInfos") TransferInfos transferInfos) throws IOException {
+	public ResponseEntity<Void> makeTransfer(HttpServletRequest request, @PathVariable int accountId,
+			@RequestBody TransferInfos transferInfos) throws IOException {
+
+//	public ModelAndView makeTransfer(HttpServletRequest request, @PathVariable int accountId,
+//			@ModelAttribute("transferInfos") TransferInfos transferInfos) throws IOException {
 
 		log.info("Requete HTTP ({}), Uri: ({})", request.getMethod(), request.getRequestURI());
 
@@ -162,7 +179,7 @@ public class AccountController {
 		}
 
 		// Transfer Ok!
-		responseEntity = new ResponseEntity<Void>(HttpStatus.OK);
+		responseEntity = new ResponseEntity<Void>(HttpStatus.CREATED);
 		log.info("The transfer ({}) of amount ({}) be realized", transferInfos.getTransferDescription(),
 						transferInfos.getTransferAmout());
 
@@ -170,7 +187,8 @@ public class AccountController {
 		log.info("Reponse ({}) requete HTTP ({}), Uri: ({})", responseEntity.getStatusCode(), request.getMethod(),
 				request.getRequestURI());
 
-		return new ModelAndView("redirect:/account/" + accountId);
+		return responseEntity;
+//		return new ModelAndView("redirect:/account/" + accountId);
 	}
 
 
@@ -186,8 +204,10 @@ public class AccountController {
 	 * @throws IOException
 	 */
 	@GetMapping("/account/connection/{id}")
-	public String addConnection(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("id") final int accountId, Model model) throws IOException {
+	public ResponseEntity<List<User>> addConnection(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("id") final int accountId) throws IOException {
+//	public String addConnection(HttpServletRequest request, HttpServletResponse response,
+//			@PathVariable("id") final int accountId, Model model) throws IOException {
 
 		log.info("Requete HTTP ({}), Uri: ({})", request.getMethod(), request.getRequestURI());
 
@@ -198,7 +218,7 @@ public class AccountController {
 			throw new AccountIdException(accountId);
 		}
 
-		model.addAttribute("account", optAccount.get());
+//		model.addAttribute("account", optAccount.get());
 
 		log.debug("Account with ID ({}) exist.", accountId);
 
@@ -207,12 +227,13 @@ public class AccountController {
 				optAccount.get());
 		log.debug("Are there available users for the connection? ({})", availableUsers.isEmpty() ? "no" : "yes");
 
-		model.addAttribute("users", availableUsers);
+//		model.addAttribute("users", availableUsers);
 
 		log.info("Reponse ({}) requete HTTP ({}), Uri: ({})", response.getStatus(), request.getMethod(),
 				request.getRequestURI());
 
-		return "addConnectionPage";
+		// return "addConnectionPage";
+		return new ResponseEntity<>(availableUsers, HttpStatus.OK);
 	}
 
 
@@ -227,9 +248,12 @@ public class AccountController {
 	 * @throws IOException
 	 */
 	@GetMapping("/account/{id1}/connection/{id2}")
-	public ModelAndView updateConnection(HttpServletRequest request, HttpServletResponse response,
+	public ResponseEntity<Void> updateConnection(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("id1") final int accountId, @PathVariable("id2") final int userId)
 			throws IOException {
+//	public ModelAndView updateConnection(HttpServletRequest request, HttpServletResponse response,
+//			@PathVariable("id1") final int accountId, @PathVariable("id2") final int userId)
+//			throws IOException {
 
 		log.info("Requete HTTP ({}), Uri: ({})", request.getMethod(), request.getRequestURI());
 
@@ -272,7 +296,8 @@ public class AccountController {
 		log.info("Reponse ({}) requete HTTP ({}), Uri: ({})", response.getStatus(), request.getMethod(),
 				request.getRequestURI());
 
-		return new ModelAndView("redirect:/account/" + accountId);
+//		return new ModelAndView("redirect:/account/" + accountId);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
 

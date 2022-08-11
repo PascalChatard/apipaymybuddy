@@ -13,7 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -57,7 +57,9 @@ public class Transfer {
 	/**
 	 * Credited Account by the transfer.
 	 */
-	@JsonIgnore // avoid "Could not write JSON: Infinite recursion (StackOverflowError)"
+	// @JsonIgnore // avoid "Could not write JSON: Infinite recursion
+	// (StackOverflowError)"
+	@JsonBackReference
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "credited_account_id")
 	Account creditedAccount;
@@ -65,7 +67,9 @@ public class Transfer {
 	/**
 	 * Debited Account by the transfer
 	 */
-	@JsonIgnore // avoid "Could not write JSON: Infinite recursion (StackOverflowError)"
+	// @JsonIgnore // avoid "Could not write JSON: Infinite recursion
+	// (StackOverflowError)"
+	@JsonBackReference
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "debited_account_id")
 	Account debitedAccount;
@@ -73,6 +77,7 @@ public class Transfer {
 	/**
 	 * Pay rate applied.
 	 */
+	@JsonBackReference
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "rate_id")
 	Rate rate;

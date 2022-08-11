@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -11,11 +12,15 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.apipaymybuddy.app.exceptions.AccountIdException;
 import com.apipaymybuddy.app.exceptions.InvalidTransferAmountException;
 import com.apipaymybuddy.app.models.Account;
+import com.apipaymybuddy.app.models.AccountModel;
 import com.apipaymybuddy.app.models.Rate;
 import com.apipaymybuddy.app.models.Transfer;
+import com.apipaymybuddy.app.models.TransferModel;
 import com.apipaymybuddy.app.models.User;
+import com.apipaymybuddy.app.models.UserModel;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -123,6 +128,72 @@ public class AccountService extends GenericService<Account> {
 		// extracts users already in the connection
 		presentUsers.forEach(user -> availableUsers.remove(user));
 		return availableUsers;
+	}
+
+	public Optional<AccountModel> getById(Integer id) {
+		log.debug("Debut methode getById, arg: entityId ({})", id);
+
+		Optional<Account> optEntity = repository.findById(id);
+		Optional<AccountModel> optModel = Optional.empty();
+
+		if (optEntity.isEmpty()) {
+
+			log.error("Account with ID ({}) does not exist.", id);
+			throw new AccountIdException(id);
+		}
+
+		AccountModel accountModel = new AccountModel();
+		accountModel.setAccountId(optEntity.get().getAccountId());
+		accountModel.setOpenDate(optEntity.get().getOpenDate());
+		accountModel.setSolde(optEntity.get().getSolde());
+		accountModel.setSolde(optEntity.get().getSolde());
+
+		UserModel accountOwner = new UserModel();
+		accountOwner.setUserId(optEntity.get().getAccountOwner().getUserId());
+		accountOwner.setFirstName(optEntity.get().getAccountOwner().getFirstName());
+		accountOwner.setLastName(optEntity.get().getAccountOwner().getLastName());
+		accountOwner.setAddress(optEntity.get().getAccountOwner().getAddress());
+		accountOwner.setCity(optEntity.get().getAccountOwner().getCity());
+		accountOwner.setPhone(optEntity.get().getAccountOwner().getPhone());
+		accountOwner.setMail(optEntity.get().getAccountOwner().getMail());
+
+		accountModel.setAccountOwner(accountOwner);
+
+		List<UserModel> connections = new ArrayList<>();
+
+		optEntity.get().getConnections().forEach((User user) -> {
+			UserModel userModel = new UserModel();
+			userModel.setUserId(user.getUserId());
+			userModel.setFirstName(user.getFirstName());
+			userModel.setLastName(user.getLastName());
+			userModel.setAddress(user.getAddress());
+			userModel.setCity(user.getCity());
+			userModel.setPhone(user.getPhone());
+			userModel.setMail(user.getMail());
+			connections.add(userModel);
+		});
+
+		accountModel.setConnections(connections);
+
+		List<TransferModel> transfers = new ArrayList<>();
+
+		optEntity.get().getTransfers().forEach(transfer -> {
+			TransferModel transferModel = new TransferModel();
+			transferModel.setTransferId(transfer.getTransferId());
+			transferModel.setDate(transfer.getDate());
+			transferModel.setDescription(transfer.getDescription());
+			transferModel.setAmount(transfer.getAmount());
+			transferModel.setCost(transfer.getCost());
+			transferModel.setTransferRecipient(transfer.getCreditedAccount().getAccountOwner().getFirstName());
+			transfers.add(transferModel);
+		});
+
+		accountModel.setTransfers(transfers);
+
+		optModel = Optional.of(accountModel);
+
+		log.debug("Fin methode getById");
+		return optModel;
 	}
 
 	/**

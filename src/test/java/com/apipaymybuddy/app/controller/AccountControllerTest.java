@@ -21,7 +21,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.apipaymybuddy.app.controller.AccountController;
 import com.apipaymybuddy.app.models.Account;
 import com.apipaymybuddy.app.models.Rate;
 import com.apipaymybuddy.app.models.TransferInfos;
@@ -123,7 +122,7 @@ public class AccountControllerTest {
 						.flashAttr("transferInfos", new TransferInfos()));
 
 		// THEN
-		perform.andExpect(status().isFound());
+		perform.andExpect(status().isCreated());
 
 	}
 

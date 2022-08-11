@@ -22,11 +22,14 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "accountId")
 @Getter
 @Setter
 @Entity
@@ -55,7 +58,8 @@ public class Account {
 	/**
 	 * Owner of the account.
 	 */
-	@JsonManagedReference // avoid "Could not write JSON: Infinite recursion (StackOverflowError)->
+	@JsonManagedReference // avoid "Could not write JSON: Infinite recursion
+	// (StackOverflowError)->
 							// exception JsonMappingException"
 	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "user_id")
@@ -72,6 +76,8 @@ public class Account {
 	/**
 	 * List of transfer operations.
 	 */
+	// @JsonIgnore
+	// @JsonManagedReference
 	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "debited_account_id")
 	List<Transfer> transfers = new ArrayList<>();

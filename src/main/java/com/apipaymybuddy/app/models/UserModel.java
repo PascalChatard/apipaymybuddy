@@ -44,9 +44,9 @@ public class UserModel {
 	private String mail;
 
 
-//	/**
-//	 * Account of user.
-//	 */
-//	private Account accountUser;
+	/**
+	 * Account of user.
+	 */
+	private Account accountUser;
 
 }

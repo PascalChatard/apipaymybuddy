@@ -1,5 +1,7 @@
 package com.apipaymybuddy.app.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -27,5 +29,13 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	 */
 	@Query(value = "SELECT COUNT(*) FROM user WHERE mail = ?1", nativeQuery = true)
 	public int getNumberUserByEmail(@Param("mail") String mail);
+
+	/**
+	 * findByMail - Get users with mail matching given email
+	 * 
+	 * @param email The email of the user to find
+	 * @return A Iterable list of users found
+	 */
+	public Optional<User> findByMail(String email);
 
 }

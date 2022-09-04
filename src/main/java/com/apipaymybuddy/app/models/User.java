@@ -9,8 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -64,14 +63,16 @@ public class User {
 	/**
 	 * Password of user.
 	 */
-	@JsonIgnore
+	// @JsonIgnore
 	private String password;
 
 	/**
 	 * Account of user.
 	 */
-	@JsonBackReference // avoid "Could not write JSON: Infinite recursion (StackOverflowError)->
-						// exception JsonMappingException"
+//	@JsonBackReference // avoid "Could not write JSON: Infinite recursion (StackOverflowError)->
+//						// exception JsonMappingException"
+//	@JsonBackReference
+	@JsonIdentityReference(alwaysAsId = true)
 	@OneToOne(mappedBy = "accountOwner", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
 	private Account accountUser;
 

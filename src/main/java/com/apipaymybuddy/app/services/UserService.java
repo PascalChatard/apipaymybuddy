@@ -1,12 +1,14 @@
 package com.apipaymybuddy.app.services;
 
 import java.sql.Date;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apipaymybuddy.app.exceptions.UserEmailException;
 import com.apipaymybuddy.app.models.Account;
 import com.apipaymybuddy.app.models.User;
 import com.apipaymybuddy.app.repositories.UserRepository;
@@ -118,6 +120,40 @@ public class UserService extends GenericService<User> {
 
 		log.debug("Fin methode atLeastOneAttributeIsEmpty");
 		return status;
+	}
+	
+	/**
+	 * findByMail - Get users with mail matching given email
+	 * 
+	 * @param email The email of the user to find
+	 * @return A Iterable list of users found
+	 */
+	public Optional<User> findByMail(String email) {
+		log.debug("Debut methode findByMail, arg: email ({})", email);
+
+		// User user = userRepository.findByMail(email);
+
+		Optional<User> optEntity = userRepository.findByMail(email);
+		// Optional<UserModel> optModel = Optional.empty();
+
+		if (optEntity.isEmpty()) {
+
+			log.error("User with Email ({}) does not exist.", email);
+			throw new UserEmailException(email);
+		}
+
+//		Userl userModel = new UserModel();
+//		userModel.setUserId(optEntity.get().getUserId());
+//		userModel.setLastName(optEntity.get().getLastName());
+//		userModel.setFirstName(optEntity.get().getFirstName());
+//		userModel.setAddress(optEntity.get().getAddress());
+//		userModel.setCity(optEntity.get().getCity());
+//		userModel.setPhone(optEntity.get().getPhone());
+//		userModel.setMail(optEntity.get().getMail());
+//		userModel.setPassword(optEntity.get().getCity());
+
+		log.debug("Fin methode findByMail");
+		return optEntity;
 	}
 
 }

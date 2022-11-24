@@ -43,12 +43,13 @@ CREATE TABLE `account` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE   
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 INSERT INTO `account` VALUES (1,'2021-12-02',150.45,1),
                              (2,'2021-11-22',25.50,2),
-							 (3,'2021-10-15',500,3);
+							 (3,'2021-10-15',500,3),
+							 (4,'2021-11-22',25.50,4);
 
 
 SELECT * FROM `account`;

@@ -21,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.apipaymybuddy.app.models.User;
+import com.apipaymybuddy.app.models.UserInfos;
 import com.apipaymybuddy.app.services.UserService;
 
 @ActiveProfiles("dev")
@@ -238,7 +239,7 @@ class UserServiceIT {
 		// GIVEN
 
 		// new user
-		User user = new User();
+		UserInfos user = new UserInfos();
 		user.setFirstName("annie");
 		user.setLastName("Legrand");
 		user.setAddress("9 rue Donjon");
@@ -279,12 +280,15 @@ class UserServiceIT {
 		// connections informations
 		assertThat(users.iterator().next().getAccountUser().getConnections()).isNotNull();
 		// when creating the account/user there are no connections
-		assertThat(user.getAccountUser().getConnections()).hasSize(0);
+		//assertThat(user.getAccountUser().getConnections()).hasSize(0);
+		assertThat(users.iterator().next().getAccountUser().getConnections()).hasSize(0);
 
 		// transfer informations
-		assertThat(user.getAccountUser().getTransfers()).isNotNull();
+		//assertThat(user.getAccountUser().getTransfers()).isNotNull();
+		assertThat(users.iterator().next().getAccountUser().getTransfers()).isNotNull();
 		// when creating the account/user there are no transfers
-		assertThat(user.getAccountUser().getTransfers().size()).isEqualTo(0);
+		//assertThat(user.getAccountUser().getTransfers().size()).isEqualTo(0);
+		assertThat(users.iterator().next().getAccountUser().getTransfers().size()).isEqualTo(0);
 	}
 
 }

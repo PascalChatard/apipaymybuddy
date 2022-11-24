@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.apipaymybuddy.app.exceptions.UserEmailException;
 import com.apipaymybuddy.app.models.Account;
 import com.apipaymybuddy.app.models.User;
+import com.apipaymybuddy.app.models.UserInfos;
 import com.apipaymybuddy.app.repositories.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -62,35 +63,40 @@ public class UserService extends GenericService<User> {
 	 * @param user The new user to add
 	 * @return operation status, true if success, false in other case
 	 */
-	public boolean createUser(User user) {
+	public boolean createUser(UserInfos userInfos) {
 
-		log.debug("Debut methode createUser, arg: User ({})", user);
-		log.info("Création d'un nouveau User et du Acount associé ({})", user);
+		log.debug("Debut methode createUser, arg: User ({})", userInfos);
+		log.info("Création d'un nouveau User et du Acount associé ({})", userInfos);
 
 		// all attributes must be filled in
-		if (atLeastOneAttributeIsEmpty(user)) {
+		if (atLeastOneAttributeIsEmpty(userInfos)) {
 
 			log.error("Echec opération création User, au moins un des attibuts est vide");
 			return false;
 		}
 
 		// email attribute must not already exist
-		if (existsByEmail(user.getMail())) {
+		if (existsByEmail(userInfos.getMail())) {
 			log.error("Echec opération création User, l'adresse mail existe déjà dans la BDD");
 			return false;
 		}
 
 		// management rule, these attributes must be capitalized
-		user.setFirstName(user.getFirstName().toUpperCase());
-		user.setLastName(user.getLastName().toUpperCase());
-		user.setAddress(user.getAddress().toUpperCase());
-		user.setCity(user.getCity().toUpperCase());
+		User user = new User(); 
+		user.setFirstName(userInfos.getFirstName().toUpperCase());
+		user.setLastName(userInfos.getLastName().toUpperCase());
+		user.setAddress(userInfos.getAddress().toUpperCase());
+		user.setCity(userInfos.getCity().toUpperCase());
+		user.setPhone(userInfos.getPhone());
+		user.setMail(userInfos.getMail());
+		user.setPassword(userInfos.getPassword());
 
 		// new account to associate with the new user
 		Account account = new Account();
 		Date date = new Date(System.currentTimeMillis());
 		account.setOpenDate(Date.valueOf(date.toString()));
 		account.setSolde(0);
+		account.setAccountOwner(user);
 		log.info("Opération création Account associé");
 
 		user.setAccountUser(account);
@@ -109,11 +115,16 @@ public class UserService extends GenericService<User> {
 	 * @return operation status, true if one or more attribute is empty, false if
 	 *         all attribute are filled
 	 */
-	private boolean atLeastOneAttributeIsEmpty(User user) {
+//	private boolean atLeastOneAttributeIsEmpty(User user) {
+	private boolean atLeastOneAttributeIsEmpty(UserInfos user) {
 
 		log.debug("Debut methode atLeastOneAttributeIsEmpty, arg: User ({})", user);
 		log.trace("Exécute methode atLeastOneAttributeIsEmpty");
 
+//		boolean status = (user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getAddress().isEmpty()
+//				|| user.getCity().isEmpty() || user.getPhone().isEmpty() || user.getMail().isEmpty()
+//				|| user.getPassword().isEmpty());
+		
 		boolean status = (user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getAddress().isEmpty()
 				|| user.getCity().isEmpty() || user.getPhone().isEmpty() || user.getMail().isEmpty()
 				|| user.getPassword().isEmpty());

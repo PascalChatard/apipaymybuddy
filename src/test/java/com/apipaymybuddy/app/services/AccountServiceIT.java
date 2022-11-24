@@ -80,7 +80,7 @@ class AccountServiceIT {
 		// check if there are records
 		assertThat(accounts).doesNotContainNull();
 		assertThat(accounts).size().isGreaterThan(0);
-		assertThat(accounts).size().isEqualTo(3L);
+		assertThat(accounts).size().isEqualTo(4L);
 	}
 
 	@Test
@@ -142,7 +142,7 @@ class AccountServiceIT {
 		long nbRecords = accountService.count();
 
 		// THEN
-		assertThat(nbRecords).isEqualTo(3L);
+		assertThat(nbRecords).isEqualTo(4L);
 	}
 
 	@Test

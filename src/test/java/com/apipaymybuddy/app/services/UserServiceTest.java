@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.apipaymybuddy.app.models.User;
+import com.apipaymybuddy.app.models.UserInfos;
 import com.apipaymybuddy.app.repositories.UserRepository;
 import com.apipaymybuddy.app.services.UserService;
 
@@ -36,6 +37,7 @@ class UserServiceTest {
 	UserService userService;
 
 	User user;
+	UserInfos userInfos;
 	Iterable<User> users;
 
 	@BeforeEach
@@ -51,6 +53,15 @@ class UserServiceTest {
 		user.setPhone("0632467802");
 		user.setMail("durand.jean@aol.com");
 		user.setPassword("jean2022");
+		
+		userInfos = new UserInfos();
+		userInfos.setFirstName("tartampion");
+		userInfos.setLastName("jean");
+		userInfos.setAddress("56 impasse des souris");
+		userInfos.setCity("marseille");
+		userInfos.setPhone("0632467802");
+		userInfos.setMail("durand.jean@aol.com");
+		userInfos.setPassword("jean2022");
 
 		users = Arrays.asList(user);
 	}
@@ -195,7 +206,7 @@ class UserServiceTest {
 		when(mockRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
 
 		// WHEN
-		boolean retCreateUser = userService.createUser(user);
+		boolean retCreateUser = userService.createUser(userInfos);
 
 		// THEN
 		assertThat(retCreateUser).isTrue();
@@ -205,11 +216,11 @@ class UserServiceTest {
 	void testCreateUserWithoutSuccess_WhenAtLeastOneAttributeIsEmpty() {
 
 		// GIVEN
-		user.setAddress("");
+		userInfos.setAddress("");
 		when(mockRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
 
 		// WHEN
-		boolean retCreateUser = userService.createUser(user);
+		boolean retCreateUser = userService.createUser(userInfos);
 
 		// THEN
 		assertThat(retCreateUser).isFalse();
@@ -247,12 +258,12 @@ class UserServiceTest {
 	void testCreateUserWithoutSuccess_WhenEmaiAttributeAlreadyExist() {
 
 		// GIVEN
-		user.setMail("alejeune@outlook.com");
+		userInfos.setMail("alejeune@outlook.com");
 		when(mockRepository.getNumberUserByEmail(ArgumentMatchers.any(String.class))).thenReturn(1);
 		when(mockRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
 
 		// WHEN
-		boolean retCreateUser = userService.createUser(user);
+		boolean retCreateUser = userService.createUser(userInfos);
 
 		// THEN
 		assertThat(retCreateUser).isFalse();

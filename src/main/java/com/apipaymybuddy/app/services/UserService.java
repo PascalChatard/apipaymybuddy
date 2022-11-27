@@ -120,10 +120,6 @@ public class UserService extends GenericService<User> {
 
 		log.debug("Debut methode atLeastOneAttributeIsEmpty, arg: User ({})", user);
 		log.trace("Exécute methode atLeastOneAttributeIsEmpty");
-
-//		boolean status = (user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getAddress().isEmpty()
-//				|| user.getCity().isEmpty() || user.getPhone().isEmpty() || user.getMail().isEmpty()
-//				|| user.getPassword().isEmpty());
 		
 		boolean status = (user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getAddress().isEmpty()
 				|| user.getCity().isEmpty() || user.getPhone().isEmpty() || user.getMail().isEmpty()

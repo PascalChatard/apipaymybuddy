@@ -107,6 +107,57 @@ public class UserService extends GenericService<User> {
 		return statusOperation;
 
 	}
+	
+	
+	/**
+	 * updateUser - Update informations of user in data base
+	 * 
+	 * @param user The user to update
+	 * @return operation status, true if success, false in other case
+	 */
+	public boolean updateUser(UserInfos userInfos) {
+
+		log.debug("Debut methode createUser, arg: User ({})", userInfos);
+		log.info("Création d'un nouveau User et du Acount associé ({})", userInfos);
+
+		// all attributes must be filled in
+		if (atLeastOneAttributeIsEmpty(userInfos)) {
+
+			log.error("Echec opération création User, au moins un des attibuts est vide");
+			return false;
+		}
+
+		// email attribute must not already exist
+		Optional<User> optUser = findByMail(userInfos.getMail());
+		if (optUser.isEmpty()) {
+
+			log.error("User with Email ({}) does not exist.", userInfos.getMail());
+			throw new UserEmailException(userInfos.getMail());
+		}
+
+
+		log.debug("User with Email ({}) exist.", userInfos.getMail());
+
+		// management rule, these attributes must be capitalized
+		User user = optUser.get();
+		user.setFirstName(userInfos.getFirstName().toUpperCase());
+		user.setLastName(userInfos.getLastName().toUpperCase());
+		user.setAddress(userInfos.getAddress().toUpperCase());
+		user.setCity(userInfos.getCity().toUpperCase());
+		user.setPhone(userInfos.getPhone());
+		user.setMail(userInfos.getMail());
+		user.setPassword(userInfos.getPassword());
+
+		log.info("Opération création Account associé");
+
+		boolean statusOperation = save(user).equals(user);
+		log.info("Opération création User: ({})", statusOperation ? "Succes" : "Echec");
+		log.debug("Fin methode createUser");
+		return statusOperation;
+
+	}
+
+	
 
 	/**
 	 * atLeastOneAttributeIsEmpty - Test if at least one attribute is empty

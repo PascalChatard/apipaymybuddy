@@ -9,12 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@DynamicUpdate
 @Getter
 @Setter
 @Entity

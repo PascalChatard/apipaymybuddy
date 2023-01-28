@@ -129,6 +129,7 @@ public class UserController {
 		log.info("user creation service call");
 
 		boolean isOk = userService.createUser(userInfos);
+		
 		// creation Ko!
 		if (!isOk) {
 
@@ -148,6 +149,69 @@ public class UserController {
 		return responseEntity;
 	}
 
+	
+	/**
+	 * updateUser - Manage update request of informations user
+	 * 
+	 * @param               idAccount, the account id to be debited
+	 * @param request       http servlet request // * @param response http servlet
+	 *                      response
+	 * @param transferInfos all transfer informations to operate transfer //
+	 *                      * @return redirect ModelAndView to /account/{idAccount}
+	 * @return a empty HTTP response
+	 * 
+	 */
+	@PostMapping("/user/{userId}")
+	public ResponseEntity<Void> updateUser(HttpServletRequest request, @PathVariable int userId,
+			@RequestBody UserInfos userInfos) throws IOException {
+
+
+		log.info("Requete HTTP ({}), Uri: ({})", request.getMethod(), request.getRequestURI());
+
+		log.debug("RequestBody:({})", userInfos.toString());
+
+		ResponseEntity<Void> responseEntity = null;
+
+		// check user exist
+		Optional<User> userOptional = userService.findById(userId);
+		if (userOptional.isEmpty()) {
+
+			log.error("User with ID ({}) does not exist.", userId);
+			throw new UserIdException(userId);
+
+		}
+
+		// check that all the required conditions are ok
+
+		User user = userOptional.get();
+
+		log.debug("Update informations user: ({}) ", user);
+		log.debug("with userInfos: ({}) ", userInfos);
+
+
+		log.info("updateUser service call");
+
+		boolean isOk =  userService.updateUser(userInfos);
+		
+		// update Ko!
+		if (!isOk) {
+
+			log.error("The update of user ({}) could not be realized", userInfos);
+			throw new UserCreationException();
+
+		}
+
+		// creation Ok!
+		responseEntity = new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		log.info("the user account ({}) update have been realized", userInfos);
+
+
+		log.info("Reponse ({}) requete HTTP ({}), Uri: ({})", responseEntity.getStatusCode(), request.getMethod(),
+				request.getRequestURI());
+
+		return responseEntity;
+
+	}
 
  
 	/**

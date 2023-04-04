@@ -2,6 +2,12 @@ package com.apipaymybuddy.app.exceptions;
 
 public class InvalidTransferAmountException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6413207548179237662L;
+
+
 	public InvalidTransferAmountException() {
 
 		super("Invaid value, the amount cannot be negative or equal to zero.");

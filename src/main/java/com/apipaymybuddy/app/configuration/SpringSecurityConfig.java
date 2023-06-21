@@ -29,7 +29,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	public void configureGlobal (AuthenticationManagerBuilder auth) throws Exception {
 	    auth.jdbcAuthentication()
-	    //.passwordEncoder(passwordEncoder())  // ajouter par moi
 	      .dataSource(dataSource)
 	      .usersByUsernameQuery("select mail,password,enabled "
 	    	        + "from user "
@@ -38,11 +37,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	    	        + "from authorities "
 	    	        + "where mail = ?");
 		
-		
-//        auth.inMemoryAuthentication()
-//    	.withUser("admin")
-//    	.password("{noop}password")
-//    	.roles("USER");
 		
 	}
 	

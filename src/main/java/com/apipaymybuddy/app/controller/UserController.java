@@ -34,7 +34,8 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-
+	
+	
 	/**
 	 * getUser - Get the user entity referred by this email
 	 * 
